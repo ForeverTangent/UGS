@@ -16,39 +16,116 @@ final class UGSStackTests: XCTestCase {
 		// Use XCTAssert and related functions to verify your tests produce the correct
 		// results.
 
+		func testPushWithNumberOfElements(_ number: Int) {
+			let testStack = Stack<Int>()
+			for element in 0..<number {
+				testStack.push(element)
+			}
+			XCTAssert(testStack.count() == number, "testStack.count() != \(number)")
+		}
+
 		let testStack1 = Stack<Int>()
 		testStack1.push(1)
 		XCTAssert(testStack1.count() == 1, "testStack1 !contain 1 element")
 
-		var targetNumberOfElements = 0
-
-		targetNumberOfElements = 10
-		let testStack2 = Stack<Int>()
-		for element in 0..<targetNumberOfElements {
-			testStack2.push(element)
-		}
-		XCTAssert(testStack2.count() == targetNumberOfElements, "testStack2 !contain \(targetNumberOfElements) elements")
-
-		targetNumberOfElements = 100
-		let testStack3 = Stack<Int>()
-		for element in 0..<targetNumberOfElements {
-			testStack3.push(element)
-		}
-		XCTAssert(testStack3.count() == targetNumberOfElements, "testStack2 !contain \(targetNumberOfElements) elements")
-
-		targetNumberOfElements = 1000
-		let testStack4 = Stack<Int>()
-		for element in 0..<targetNumberOfElements {
-			testStack4.push(element)
-		}
-		XCTAssert(testStack4.count() == targetNumberOfElements, "testStack2 !contain \(targetNumberOfElements) elements")
-
-		targetNumberOfElements = 1000000
-		let testStack5 = Stack<Int>()
-		for element in 0..<targetNumberOfElements {
-			testStack5.push(element)
-		}
-		XCTAssert(testStack5.count() == targetNumberOfElements, "testStack2 !contain \(targetNumberOfElements) elements")
+		testPushWithNumberOfElements(10)
+		testPushWithNumberOfElements(100)
+		testPushWithNumberOfElements(1000)
+		testPushWithNumberOfElements(1000000)
 
 	}
+
+	func testStackPop() {
+		// This is an example of a functional test case.
+		// Use XCTAssert and related functions to verify your tests produce the correct
+		// results.
+
+		func testPopWithNumberOfElements(_ number: Int) {
+			let poppedElement = number - 1
+
+			let testStack = Stack<Int>()
+			for element in 0..<number {
+				testStack.push(element)
+			}
+			guard
+				let thePoppedElement = testStack.pop()
+			else {
+				XCTAssertTrue(false, "Error testStack with \(number), nothign was popped.")
+				return
+			}
+			XCTAssert(thePoppedElement == poppedElement, "thePoppedElement != \(poppedElement)")
+			XCTAssert(testStack.count() == poppedElement, "testStack.count() != poppedElement")
+		}
+
+
+		testPopWithNumberOfElements(10)
+		testPopWithNumberOfElements(100)
+		testPopWithNumberOfElements(1000)
+		testPopWithNumberOfElements(1000000)
+
+	}
+
+	func testStackPeak() {
+		// This is an example of a functional test case.
+		// Use XCTAssert and related functions to verify your tests produce the correct
+		// results.
+
+		func testPeakWithNumberOfElements(_ number: Int) {
+			let peakedElement = number - 2
+			let poppedElement = number - 1
+
+			let testStack = Stack<Int>()
+			for element in 0..<number {
+				testStack.push(element)
+			}
+			guard
+				let thePoppedElement = testStack.pop(),
+				let thePeakedElement = testStack.peak()
+			else {
+				XCTAssertTrue(false, "Error testStack with \(number), nothign was popped.")
+				return
+			}
+			XCTAssert(thePoppedElement == poppedElement, "thePoppedElement != \(poppedElement)")
+			XCTAssert(thePeakedElement == peakedElement, "thePeakedElement != \(peakedElement)")
+			XCTAssert(testStack.count() == poppedElement, "testStack.count() != poppedElement")
+		}
+
+
+		testPeakWithNumberOfElements(10)
+		testPeakWithNumberOfElements(100)
+		testPeakWithNumberOfElements(1000)
+		testPeakWithNumberOfElements(1000000)
+
+	}
+
+	func testStackEmptyClear() {
+		// This is an example of a functional test case.
+		// Use XCTAssert and related functions to verify your tests produce the correct
+		// results.
+
+		func testEmptyClearWithNumberOfElements(_ number: Int) {
+			let testStack = Stack<Int>()
+			for element in 0..<number {
+				testStack.push(element)
+			}
+			XCTAssertFalse(testStack.isEmpty, "testStack.isEmpty != false")
+			guard
+				let _ = testStack.pop()
+			else {
+				XCTAssertTrue(false, "Error testStack with \(number), nothign was popped.")
+				return
+			}
+			XCTAssertFalse(testStack.isEmpty, "testStack.isEmpty != false")
+			testStack.clear()
+			XCTAssertTrue(testStack.isEmpty, "testStack.isEmpty != true")
+		}
+
+
+		testEmptyClearWithNumberOfElements(10)
+		testEmptyClearWithNumberOfElements(100)
+		testEmptyClearWithNumberOfElements(1000)
+		testEmptyClearWithNumberOfElements(1000000)
+
+	}
+
 }
