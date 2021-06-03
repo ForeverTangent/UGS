@@ -8,18 +8,18 @@
 import Foundation
 
 /**
-Stack build on Swift's basic array structure.
+Stack built on Swift's basic array structure.
 
 The elements can be pretty much anything.
 */
-class Stack<E> {
+struct Stack<E> {
 	var items  = [E]()
 
-	func push(_ item: E) {
+	mutating func push(_ item: E) {
 		items.append(item)
 	}
 
-	func pop() -> E? {
+	mutating func pop() -> E? {
 		return items.removeLast()
 	}
 
@@ -37,7 +37,7 @@ class Stack<E> {
 		}
 	}
 
-	func clear() {
+	mutating func clear() {
 		items.removeAll()
 	}
 }

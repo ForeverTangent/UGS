@@ -17,14 +17,14 @@ final class UGSStackTests: XCTestCase {
 		// results.
 
 		func testPushWithNumberOfElements(_ number: Int) {
-			let testStack = Stack<Int>()
+			var testStack = Stack<Int>()
 			for element in 0..<number {
 				testStack.push(element)
 			}
 			XCTAssert(testStack.count() == number, "testStack.count() != \(number)")
 		}
 
-		let testStack1 = Stack<Int>()
+		var testStack1 = Stack<Int>()
 		testStack1.push(1)
 		XCTAssert(testStack1.count() == 1, "testStack1 !contain 1 element")
 
@@ -43,7 +43,7 @@ final class UGSStackTests: XCTestCase {
 		func testPopWithNumberOfElements(_ number: Int) {
 			let poppedElement = number - 1
 
-			let testStack = Stack<Int>()
+			var testStack = Stack<Int>()
 			for element in 0..<number {
 				testStack.push(element)
 			}
@@ -74,7 +74,7 @@ final class UGSStackTests: XCTestCase {
 			let peakedElement = number - 2
 			let poppedElement = number - 1
 
-			let testStack = Stack<Int>()
+			var testStack = Stack<Int>()
 			for element in 0..<number {
 				testStack.push(element)
 			}
@@ -104,7 +104,7 @@ final class UGSStackTests: XCTestCase {
 		// results.
 
 		func testEmptyClearWithNumberOfElements(_ number: Int) {
-			let testStack = Stack<Int>()
+			var testStack = Stack<Int>()
 			for element in 0..<number {
 				testStack.push(element)
 			}
@@ -120,11 +120,11 @@ final class UGSStackTests: XCTestCase {
 			XCTAssertTrue(testStack.isEmpty, "testStack.isEmpty != true")
 		}
 
-
 		testEmptyClearWithNumberOfElements(10)
 		testEmptyClearWithNumberOfElements(100)
 		testEmptyClearWithNumberOfElements(1000)
 		testEmptyClearWithNumberOfElements(1000000)
+
 
 	}
 
