@@ -58,10 +58,38 @@ final class UGSStackTests: XCTestCase {
 		}
 
 
+		func testPopAllTilEmpTyWithNumberOfElements(_ number: Int) {
+
+			var testStack = Stack<Int>()
+			for element in 0..<number {
+				testStack.push(element)
+			}
+			guard
+				testStack.pop() != nil
+			else {
+				XCTAssertTrue(false, "Error testStack with \(number), nothign was popped.")
+				return
+			}
+
+
+			for _ in 0..<number {
+				_ = testStack.pop()
+			}
+
+			XCTAssertTrue(testStack.isEmpty, "!testStack.isEmpty")
+
+		}
+
+
 		testPopWithNumberOfElements(10)
 		testPopWithNumberOfElements(100)
 		testPopWithNumberOfElements(1000)
 		testPopWithNumberOfElements(1000000)
+
+		testPopAllTilEmpTyWithNumberOfElements(10)
+		testPopAllTilEmpTyWithNumberOfElements(100)
+		testPopAllTilEmpTyWithNumberOfElements(1000)
+		testPopAllTilEmpTyWithNumberOfElements(1000000)
 
 	}
 

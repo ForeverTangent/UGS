@@ -20,6 +20,11 @@ struct Stack<E> {
 	}
 
 	mutating func pop() -> E? {
+		guard
+			!items.isEmpty
+		else {
+			return nil
+		}
 		return items.removeLast()
 	}
 
