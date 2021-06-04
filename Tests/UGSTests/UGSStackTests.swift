@@ -84,12 +84,10 @@ final class UGSStackTests: XCTestCase {
 		testPopWithNumberOfElements(10)
 		testPopWithNumberOfElements(100)
 		testPopWithNumberOfElements(1000)
-		testPopWithNumberOfElements(1000000)
 
 		testPopAllTilEmpTyWithNumberOfElements(10)
 		testPopAllTilEmpTyWithNumberOfElements(100)
 		testPopAllTilEmpTyWithNumberOfElements(1000)
-		testPopAllTilEmpTyWithNumberOfElements(1000000)
 
 	}
 

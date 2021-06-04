@@ -7,14 +7,14 @@
 
 import Foundation
 
-class Queue<E> {
+struct Queue<E> {
 	var items  = [E]()
 
-	func push(_ item: E) {
+	mutating func push(_ item: E) {
 		items.append(item)
 	}
 
-	func pop() -> E? {
+	mutating func pop() -> E? {
 		guard
 			!items.isEmpty
 		else {
@@ -37,7 +37,7 @@ class Queue<E> {
 		}
 	}
 
-	func clear() {
+	mutating func clear() {
 		items.removeAll()
 	}
 
