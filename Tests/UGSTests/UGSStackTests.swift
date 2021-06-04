@@ -153,7 +153,6 @@ final class UGSStackTests: XCTestCase {
 		testEmptyClearWithNumberOfElements(1000)
 		testEmptyClearWithNumberOfElements(1000000)
 
-
 	}
 
 }

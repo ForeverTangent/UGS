@@ -50,9 +50,7 @@ struct Stack<E> {
 
 extension Stack: CustomStringConvertible {
 	var description: String {
-		get {
-			getStackDescription()
-		}
+		getStackDescription()
 	}
 
 	func getStackDescription() -> String {
