@@ -10,7 +10,7 @@ import Foundation
 /**
 Heap built using Swift's basic array structure.
 
-Out first 'class' structure for reasons forth coming.
+Our first 'class' structure for reasons forth coming.
 
 The elements can be pretty much anything as long as they conform to the Comparable Protocol
 
@@ -35,7 +35,14 @@ class Heap<E: Comparable> {
 			items.count - 1
 		}
 	}
-	var isEmpty: Bool { return count == 0 }
+	var isEmpty: Bool {
+		guard
+			!items.isEmpty
+		else {
+			fatalError("There should always be 1 placeholder item in the Heap storage.")
+		}
+		return count == 1
+	}
 
 
 	// MARK: - Inits
@@ -66,7 +73,11 @@ class Heap<E: Comparable> {
 		else {
 			return -1
 		}
-		return 2 * index
+		let leftChildIndex = 2 * index
+		if leftChildIndex <= count {
+			return leftChildIndex
+		}
+		return -1
 	}
 
 	private func getRightChildIndex(_ index: Int) -> Int {
@@ -75,7 +86,11 @@ class Heap<E: Comparable> {
 		else {
 			return -1
 		}
-		return 2 * index + 1
+		let rightChildIndex = 2 * index + 1
+		if rightChildIndex <= count {
+			return rightChildIndex
+		}
+		return -1
 	}
 
 
@@ -108,15 +123,18 @@ class Heap<E: Comparable> {
 		return getRightChildIndex(index) < count
 	}
 
+
 	// MARK: getRelative()
 
 	private func getParent(_ index: Int) -> E? {
 		guard
 			index != 0,
-			index < count
+			index != 1,
+			index <= count
 		else {
 			return nil
 		}
+
 		let results = items[getParentIndex(index)]
 		return results
 	}
@@ -128,8 +146,11 @@ class Heap<E: Comparable> {
 		else {
 			return nil
 		}
-		let results = items[getLeftChildIndex(index)]
-		return results
+		let leftChildIndex = getLeftChildIndex(index)
+		if leftChildIndex != -1 {
+			return items[leftChildIndex]
+		}
+		return nil
 	}
 
 	private func getRightChild(_ index: Int) -> E? {
@@ -139,13 +160,92 @@ class Heap<E: Comparable> {
 		else {
 			return nil
 		}
-		let results = items[getRightChildIndex(index)]
-		return results
+		let rightChildIndex = getRightChildIndex(index)
+		if rightChildIndex != -1 {
+			return items[rightChildIndex]
+		}
+		return nil
 	}
 
 	// MARK: Heapify()
 
+	private func swap(indexOne: Int, indexTwo: Int) {
+		items[0] = items[indexOne]
+		items[indexOne] = items[indexTwo]
+		items[indexTwo] = items[0]
+		items[0] = nil
+	}
+
+	private func heapifyUp() {
+		guard
+			!isEmpty
+		else {
+			return
+		}
+
+		var index = count
+
+		while
+			isMinHeap,
+			let parentElement = getParent(index),
+			let addedElment = items[index],
+			hasParent(index) && parentElement > addedElment {
+			swap(indexOne: getParentIndex(index), indexTwo: index)
+			index = getParentIndex(index)
+		}
+
+		while
+			!isMinHeap,
+			let parentElement = getParent(index),
+			let addedElment = items[index],
+			hasParent(index) && parentElement < addedElment {
+			swap(indexOne: getParentIndex(index), indexTwo: index)
+			index = getParentIndex(index)
+		}
+
+	}
+
+	private func heapifyDown() { }
+
+
+	// MARK: Publics
+
+	public func add(_ item: E) {
+		items.append(item)
+		heapifyUp()
+	}
+
+	public func remove() -> E? {
+		return nil
+	}
+
+	public func peak() -> E? {
+		return nil
+	}
+
 }
+
+
+
+extension Heap: CustomStringConvertible, CustomDebugStringConvertible {
+	var debugDescription: String {
+		return String(describing: items)
+	}
+
+	var description: String {
+		return String(describing: items)
+	}
+
+	func getDescription() -> String {
+
+		var _ = items.reduce(0) { max(String(describing: $0).count, String(describing: $1).count ) }
+
+		return ""
+	}
+
+}
+
+
 
 
 // MARK: - For Unit Tests / Console Debugging
@@ -155,6 +255,12 @@ extension Heap {
 	These are public accessors for the private function for the Unit Tests.
 	*/
 	#if DEBUG
+
+	convenience init(isMinHeap: Bool = true, mockArray: Array<E?> = Array<E?>()) {
+		self.init(isMinHeap: isMinHeap)
+		let joined = items + mockArray[0...]
+		items = joined
+	}
 
 	public func testGetParentIndex(_ index: Int) -> Int {
 		return getParentIndex(index)
@@ -184,12 +290,17 @@ extension Heap {
 		return getParent(index)
 	}
 
-	public func testLeftChild(_ index: Int) -> E? {
+	public func testGetLeftChild(_ index: Int) -> E? {
 		return getLeftChild(index)
 	}
 
-	public func testRightChild(_ index: Int) -> E? {
+	public func testGetRightChild(_ index: Int) -> E? {
 		return getRightChild(index)
+	}
+
+	public func testHeapifyUp() -> [E?] {
+		heapifyUp()
+		return items
 	}
 
 	#endif
