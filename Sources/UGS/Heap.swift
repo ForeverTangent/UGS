@@ -110,7 +110,8 @@ class Heap<E: Comparable> {
 
 	private func getParent(_ index: Int) -> E? {
 		guard
-			index != 0 || index != 1,
+			index != 0,
+			index != 1,
 			index <= count
 		else {
 			return nil

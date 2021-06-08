@@ -21,9 +21,9 @@ final class UGSHeapTests: XCTestCase {
 		result = testHeap.testGetParentIndex(0)
 		XCTAssert(result == -1, "result != -1")
 		result = testHeap.testGetLeftChildIndex(0)
-		XCTAssert(result == -1, "result != -1")
+		XCTAssert(result == 0, "result != 0")
 		result = testHeap.testGetRightChildIndex(0)
-		XCTAssert(result == -1, "result != -1")
+		XCTAssert(result == 1, "result != 0")
 
 		result = testHeap.testGetParentIndex(1)
 		XCTAssert(result == 1, "result \(result) != 1")
@@ -62,7 +62,6 @@ final class UGSHeapTests: XCTestCase {
 		result = testHeap.testGetParentIndex(15)
 		XCTAssert(result == 7, "result \(result) != 7")
 
-
 		result = testHeap.testGetParentIndex(4389129)
 		XCTAssert(result == 2194564, "result \(result) != 2194564")
 
@@ -73,6 +72,37 @@ final class UGSHeapTests: XCTestCase {
 
 		let testHeap = Heap<Int>()
 		var result = 0
+
+		result = testHeap.testGetLeftChildIndex(0)
+		XCTAssert(result == 0, "result \(result) != 0")
+
+		result = testHeap.testGetRightChildIndex(0)
+		XCTAssert(result == 1, "result \(result) != 1")
+
+		result = testHeap.testGetLeftChildIndex(1)
+		XCTAssert(result == 2, "result \(result) != 2")
+
+		result = testHeap.testGetRightChildIndex(1)
+		XCTAssert(result == 3, "result \(result) != 3")
+
+		result = testHeap.testGetLeftChildIndex(2)
+		XCTAssert(result == 4, "result \(result) != 4")
+
+		result = testHeap.testGetRightChildIndex(2)
+		XCTAssert(result == 5, "result \(result) != 5")
+
+		result = testHeap.testGetLeftChildIndex(3)
+		XCTAssert(result == 6, "result \(result) != 6")
+
+		result = testHeap.testGetRightChildIndex(3)
+		XCTAssert(result == 7, "result \(result) != 7")
+
+
+		result = testHeap.testGetLeftChildIndex(4389129)
+		XCTAssert(result == 8778258, "result \(result) != 8778258")
+
+		result = testHeap.testGetRightChildIndex(4389129)
+		XCTAssert(result == 8778259, "result \(result) != 8778259")
 
 		
 	}
