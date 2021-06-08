@@ -69,6 +69,15 @@ final class UGSHeapTests: XCTestCase {
 	}
 
 
+	func testGetChildIndexes() {
+
+		let testHeap = Heap<Int>()
+		var result = 0
+
+		
+	}
+
+
 	func testGetParentElements() {
 		let testHeap0 = Heap<Int>(mockArray: [1, 2, 3, 4, 5, 6, 7])
 		print(testHeap0)
@@ -133,7 +142,7 @@ final class UGSHeapTests: XCTestCase {
 		print(result as Any)
 
 		result = testHeap0.testGetRightChild(3)
-		XCTAssert(result == 7, "result \(String(describing: result)) != 7")
+		XCTAssert(result == 7, "result \(String(describing: result)) \(String(describing: result)) != 7")
 		print(result as Any)
 
 

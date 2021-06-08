@@ -68,29 +68,11 @@ class Heap<E: Comparable> {
 	}
 
 	private func getLeftChildIndex(_ index: Int) -> Int {
-		guard
-			index != 0
-		else {
-			return -1
-		}
-		let leftChildIndex = 2 * index
-		if leftChildIndex <= count {
-			return leftChildIndex
-		}
-		return -1
+		return 2 * index
 	}
 
 	private func getRightChildIndex(_ index: Int) -> Int {
-		guard
-			index != 0
-		else {
-			return -1
-		}
-		let rightChildIndex = 2 * index + 1
-		if rightChildIndex <= count {
-			return rightChildIndex
-		}
-		return -1
+		return 2 * index + 1
 	}
 
 
@@ -128,8 +110,7 @@ class Heap<E: Comparable> {
 
 	private func getParent(_ index: Int) -> E? {
 		guard
-			index != 0,
-			index != 1,
+			index != 0 || index != 1,
 			index <= count
 		else {
 			return nil
@@ -140,31 +121,25 @@ class Heap<E: Comparable> {
 	}
 
 	private func getLeftChild(_ index: Int) -> E? {
+		let leftChildIndex = getLeftChildIndex(index)
 		guard
 			index != 0,
-			index < count
+			leftChildIndex <= count
 		else {
 			return nil
 		}
-		let leftChildIndex = getLeftChildIndex(index)
-		if leftChildIndex != -1 {
-			return items[leftChildIndex]
-		}
-		return nil
+		return items[leftChildIndex]
 	}
 
 	private func getRightChild(_ index: Int) -> E? {
+		let rightChildIndex = getRightChildIndex(index)
 		guard
 			index != 0,
-			index < count
+			rightChildIndex <= count
 		else {
 			return nil
 		}
-		let rightChildIndex = getRightChildIndex(index)
-		if rightChildIndex != -1 {
-			return items[rightChildIndex]
-		}
-		return nil
+		return items[rightChildIndex]
 	}
 
 	// MARK: Heapify()
