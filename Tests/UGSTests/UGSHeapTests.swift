@@ -13,6 +13,92 @@ import XCTest
 
 final class UGSHeapTests: XCTestCase {
 
+	func testHeapHasParent() {
+
+		let testHeap = Heap<Int>(mockArray: [1, 2, 3, 4, 5, 6, 7])
+		var result = true
+
+		result = testHeap.testHasParent(1)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasParent(2)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasParent(3)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasParent(4)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasParent(5)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasParent(6)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasParent(7)
+		XCTAssertTrue(result, "result \(result) != true")
+
+	}
+
+	func testHeapHasLeftChild() {
+
+		let testHeap = Heap<Int>(mockArray: [1, 2, 3, 4, 5, 6, 7])
+		var result = true
+
+		result = testHeap.testHasLeftChild(1)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasLeftChild(2)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasLeftChild(3)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasLeftChild(4)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasLeftChild(5)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasLeftChild(6)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasLeftChild(7)
+		XCTAssertFalse(result, "result \(result) != false")
+
+	}
+
+	func testHeapHasRightChild() {
+
+		let testHeap = Heap<Int>(mockArray: [1, 2, 3, 4, 5, 6, 7])
+		var result = true
+
+		result = testHeap.testHasRightChild(1)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasRightChild(2)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasRightChild(3)
+		XCTAssertTrue(result, "result \(result) != true")
+
+		result = testHeap.testHasRightChild(4)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasRightChild(5)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasRightChild(6)
+		XCTAssertFalse(result, "result \(result) != false")
+
+		result = testHeap.testHasRightChild(7)
+		XCTAssertFalse(result, "result \(result) != false")
+
+
+	}
+
+
 	func testHeapGetParentIndexes() {
 
 		let testHeap = Heap<Int>()
@@ -103,142 +189,221 @@ final class UGSHeapTests: XCTestCase {
 
 		result = testHeap.testGetRightChildIndex(4389129)
 		XCTAssert(result == 8778259, "result \(result) != 8778259")
-
 		
 	}
 
 
 	func testGetParentElements() {
 		let testHeap0 = Heap<Int>(mockArray: [1, 2, 3, 4, 5, 6, 7])
-		print(testHeap0)
 
 		var result: Int? = 0
 
 		result = testHeap0.testGetParent(1)
 		XCTAssertNil(result, "result \(String(describing: result)) != nil")
-		print(result as Any)
 
 		result = testHeap0.testGetParent(2)
 		XCTAssert(result == 1, "result \(String(describing: result)) != 1")
-		print(result as Any)
 
 		result = testHeap0.testGetParent(3)
 		XCTAssert(result == 1, "result \(String(describing: result)) != 1")
-		print(result as Any)
 
 		result = testHeap0.testGetParent(4)
 		XCTAssert(result == 2, "result \(String(describing: result)) != 2")
-		print(result as Any)
 
 		result = testHeap0.testGetParent(5)
 		XCTAssert(result == 2, "result \(String(describing: result)) != 2")
-		print(result as Any)
 
 		result = testHeap0.testGetParent(6)
 		XCTAssert(result == 3, "result \(String(describing: result)) != 3")
-		print(result as Any)
 
 		result = testHeap0.testGetParent(7)
 		XCTAssert(result == 3, "result \(String(describing: result)) != 3")
-		print(result as Any)
 
 	}
 
 
 	func testGetChildElements() {
 		let testHeap0 = Heap<Int>(mockArray: [1, 2, 3, 4, 5, 6, 7])
-		print(testHeap0)
 
 		var result: Int? = 0
 
 		result = testHeap0.testGetLeftChild(1)
 		XCTAssert(result == 2, "result \(String(describing: result)) != 2")
-		print(result as Any)
 
 		result = testHeap0.testGetRightChild(1)
 		XCTAssert(result == 3, "result \(String(describing: result)) != 3")
-		print(result as Any)
 
 		result = testHeap0.testGetLeftChild(2)
 		XCTAssert(result == 4, "result \(String(describing: result)) != 4")
-		print(result as Any)
 
 		result = testHeap0.testGetRightChild(2)
 		XCTAssert(result == 5, "result \(String(describing: result)) != 5")
-		print(result as Any)
 
 		result = testHeap0.testGetLeftChild(3)
 		XCTAssert(result == 6, "result \(String(describing: result)) != 6")
-		print(result as Any)
 
 		result = testHeap0.testGetRightChild(3)
 		XCTAssert(result == 7, "result \(String(describing: result)) \(String(describing: result)) != 7")
-		print(result as Any)
 
 
 		for index in 4...7  {
 			result = testHeap0.testGetLeftChild(index)
 			XCTAssertNil(result, "index \(index) -> result left child \(String(describing: result)) != nil")
-			print(result as Any)
 
 			result = testHeap0.testGetRightChild(index)
 			XCTAssertNil(result, "index \(index) -> result right child \(String(describing: result)) != nil")
-			print(result as Any)
 		}
 
-//		result = testHeap0.testGetParent(2)
-//		XCTAssert(result == 1, "result \(String(describing: result)) != 1")
-//		print(result as Any)
-//
-//		result = testHeap0.testGetParent(3)
-//		XCTAssert(result == 1, "result \(String(describing: result)) != 1")
-//		print(result as Any)
-//
-//		result = testHeap0.testGetParent(4)
-//		XCTAssert(result == 2, "result \(String(describing: result)) != 2")
-//		print(result as Any)
-//
-//		result = testHeap0.testGetParent(5)
-//		XCTAssert(result == 2, "result \(String(describing: result)) != 2")
-//		print(result as Any)
-//
-//		result = testHeap0.testGetParent(6)
-//		XCTAssert(result == 3, "result \(String(describing: result)) != 3")
-//		print(result as Any)
-//
-//		result = testHeap0.testGetParent(7)
-//		XCTAssert(result == 3, "result \(String(describing: result)) != 3")
-//		print(result as Any)
+	}
+
+
+	
+
+	func testMinHeapifyUp() {
+
+		var theResults: [Int?] = [Int?]()
+
+		func runTestHeapifyUpWith(mockArray: [Int], target: Int = 1) {
+			var testHeapMin = Heap<Int>(mockArray: mockArray)
+			theResults = testHeapMin.testHeapifyUp()
+			if let theResult = theResults[1] {
+				XCTAssert(theResult == target, "theResult \(theResult) != \(target)")
+			}
+		}
+
+		runTestHeapifyUpWith(mockArray: [2, 1])
 
 	}
 
 
+	func testMaxHeapifyUp() {
+		//		var target: [Int?] = [nil]
+		var theResults: [Int?] = [Int?]()
 
+		func runTestHeapifyUpWith(mockArray: [Int], target: Int = 1) {
+			var testHeapMax = Heap<Int>(isMinHeap: false, mockArray: mockArray)
+			theResults = testHeapMax.testHeapifyUp()
+			if let theResult = theResults[1] {
+				XCTAssert(theResult == target, "theResult \(theResult) != \(target)")
+			}
+		}
 
-	func testHeapAdd() {
-
-//		let testHeap0 = Heap<Int>(mockArray: [1])
-//		print(testHeap0)
-//
-//		let testHeap1 = Heap<Int>()
-//		print(testHeap1)
-//
-//		testHeap1.add(3)
-//		print(testHeap1)
-//
-//		testHeap1.add(2)
-//		print(testHeap1)
-//
-//		testHeap1.add(1)
-//		print(testHeap1)
-//
-//
-//		let testHeap2 = Heap<Int>(mockArray: [2, 1])
-//		let results = testHeap2.testHeapifyUp()
-//		print(results)
+		runTestHeapifyUpWith(mockArray: [1, 2], target: 2)
+		runTestHeapifyUpWith(mockArray: [1, 2, 3], target: 3)
+		runTestHeapifyUpWith(mockArray: [1, 2, 3, 4], target: 4)
+		runTestHeapifyUpWith(mockArray: [1, 2, 3, 4, 5], target: 5)
+		runTestHeapifyUpWith(mockArray: [1, 2, 3, 4, 5, 6], target: 6)
+		runTestHeapifyUpWith(mockArray: [1, 2, 3, 4, 5, 6, 7], target: 7)
 
 	}
 
 
+	func testMinHeapifyDown() {
+
+		func getLastHalfOfHeap(mockArray: [Int]) -> [Int] {
+			let droppedFirst = mockArray.compactMap{ $0 }
+			let start = droppedFirst.count / 2
+			let results = Array(droppedFirst[start...])
+			return results
+		}
+
+
+		func runTestMinHeapifyDownWith(mockArray: [Int], targetBottom: Int) {
+
+			var testHeapMax = Heap<Int>(mockArray: mockArray)
+
+			let theResults = testHeapMax.testHeapifyDown().compactMap{ $0 }
+			guard
+				let top = testHeapMax.peak()
+			else {
+				XCTAssert(false, "No First")
+				return
+			}
+			let theLastHalf = getLastHalfOfHeap(mockArray: theResults)
+
+//			print("R: \(theResults)")
+//			print("T: \(top)")
+//			print("LH: \(theLastHalf)")
+
+			XCTAssert(top == 1, "top \(top) != 1")
+			XCTAssert(theLastHalf.contains(targetBottom), "lastHalfOfResults != contain \(targetBottom)")
+
+		}
+
+
+		runTestMinHeapifyDownWith(mockArray: [2, 1], targetBottom: 2)
+		runTestMinHeapifyDownWith(mockArray: [3, 1, 2], targetBottom: 3)
+		runTestMinHeapifyDownWith(mockArray: [3, 2, 1], targetBottom: 3)
+		runTestMinHeapifyDownWith(mockArray: [4, 1, 2, 3], targetBottom: 4)
+		runTestMinHeapifyDownWith(mockArray: [4, 2, 1, 3], targetBottom: 4)
+		runTestMinHeapifyDownWith(mockArray: [5, 1, 2, 3, 4], targetBottom: 5)
+		runTestMinHeapifyDownWith(mockArray: [5, 2, 1, 3, 4], targetBottom: 5)
+		runTestMinHeapifyDownWith(mockArray: [5, 1, 2, 4, 3], targetBottom: 5)
+		runTestMinHeapifyDownWith(mockArray: [5, 2, 1, 4, 3], targetBottom: 5)
+		runTestMinHeapifyDownWith(mockArray: [6, 1, 2, 3, 4, 5], targetBottom: 6)
+		runTestMinHeapifyDownWith(mockArray: [6, 2, 1, 3, 5, 4], targetBottom: 6)
+		runTestMinHeapifyDownWith(mockArray: [6, 1, 2, 5, 3, 4], targetBottom: 6)
+		runTestMinHeapifyDownWith(mockArray: [6, 2, 1, 4, 5, 3], targetBottom: 6)
+		runTestMinHeapifyDownWith(mockArray: [7, 1, 2, 3, 4, 5, 6], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 2, 1, 3, 4, 5, 6], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 1, 2, 3, 4, 6, 6], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 2, 1, 3, 4, 5, 5], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 1, 2, 4, 3, 5, 6], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 2, 1, 4, 3, 6, 5], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 1, 2, 4, 3, 5, 6], targetBottom: 7)
+		runTestMinHeapifyDownWith(mockArray: [7, 2, 1, 4, 3, 6, 5], targetBottom: 7)
+
+	}
+
+	func testMaxHeapifyDown() {
+		func getLastHalfOfHeap(mockArray: [Int]) -> [Int] {
+			let droppedFirst = mockArray.compactMap{ $0 }
+			let start = droppedFirst.count / 2
+			let results = Array(droppedFirst[start...])
+			return results
+		}
+
+		func runTestMaxHeapifyDownWith(mockArray: [Int], targetTop: Int, targetBottom: Int) {
+			var testHeapMax = Heap<Int>(isMinHeap: false, mockArray: mockArray)
+			let theResults = testHeapMax.testHeapifyDown().compactMap{ $0 }
+			guard
+				let top = testHeapMax.peak()
+			else {
+				XCTAssert(false, "No First")
+				return
+			}
+			let theLastHalf = getLastHalfOfHeap(mockArray: theResults)
+
+
+			XCTAssert(top == targetTop, "top \(top) != targetTop \(targetTop)")
+			XCTAssert(theLastHalf.contains(targetBottom), "lastHalfOfResults != contain \(targetBottom)")
+
+		}
+
+		runTestMaxHeapifyDownWith(mockArray: [1, 2], targetTop: 2, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 2, 3], targetTop: 3, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 3, 2], targetTop: 3, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 4, 3, 2], targetTop: 4, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 3, 4, 2], targetTop: 4, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 5, 4, 3, 2], targetTop: 5, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 4, 5, 3, 2], targetTop: 5, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 5, 4, 2, 3], targetTop: 5, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 4, 5, 2, 3], targetTop: 5, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 5, 4, 3, 2], targetTop: 6, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 5, 6, 4, 3, 2], targetTop: 6, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 5, 3, 2, 4], targetTop: 6, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 5, 6, 3, 2, 4], targetTop: 6, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 5, 2, 4, 3], targetTop: 6, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 5, 6, 2, 4, 3], targetTop: 6, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 7, 6, 5, 4, 3, 2], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 7, 5, 4, 3, 2], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 7, 6, 4, 5, 3, 2], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 7, 4, 5, 3, 2], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 7, 6, 5, 4, 2, 3], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 7, 5, 4, 2, 3], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 7, 6, 4, 5, 2, 3], targetTop: 7, targetBottom: 1)
+		runTestMaxHeapifyDownWith(mockArray: [1, 6, 7, 4, 5, 2, 3], targetTop: 7, targetBottom: 1)
+
+	}
 
 }

@@ -10,8 +10,6 @@ import Foundation
 /**
 Heap built using Swift's basic array structure.
 
-Our first 'class' structure for reasons forth coming.
-
 The elements can be pretty much anything as long as they conform to the Comparable Protocol
 
 Starting index at 1.   There are two ways to make a heap with arrays.  One starting at the 0-index, and the other starting at the 1-index.
@@ -19,7 +17,7 @@ Starting index at 1.   There are two ways to make a heap with arrays.  One start
 I prefer the 1 index approach, because it lets you reserve the 0-index, if you want to use it for something (like a temporary space).
 
 */
-class Heap<E: Comparable> {
+struct Heap<E: Comparable> {
 
 	// MARK: - Properties
 
@@ -80,7 +78,8 @@ class Heap<E: Comparable> {
 
 	private func hasParent(_ index: Int) -> Bool {
 		guard
-			index != 0
+			index != 0,
+			index != 1
 		else {
 			return false
 		}
@@ -93,7 +92,7 @@ class Heap<E: Comparable> {
 		else {
 			return false
 		}
-		return getLeftChildIndex(index) < count
+		return getLeftChildIndex(index) <= count
 	}
 
 	private func hasRightChild(_ index: Int) -> Bool {
@@ -102,7 +101,7 @@ class Heap<E: Comparable> {
 		else {
 			return false
 		}
-		return getRightChildIndex(index) < count
+		return getRightChildIndex(index) <= count
 	}
 
 
@@ -143,24 +142,28 @@ class Heap<E: Comparable> {
 		return items[rightChildIndex]
 	}
 
+	
 	// MARK: Heapify()
 
-	private func swap(indexOne: Int, indexTwo: Int) {
+	private mutating func swap(indexOne: Int, indexTwo: Int) {
 		items[0] = items[indexOne]
 		items[indexOne] = items[indexTwo]
 		items[indexTwo] = items[0]
 		items[0] = nil
 	}
 
-	private func heapifyUp() {
-		guard
-			!isEmpty
-		else {
-			return
-		}
 
+
+//	mutating private func heapifyUp() {
+//		var index = items.count - 1
+//		while hasParent(index) && parent(index) > items[index] {
+//			swap(indexOne: getParentIndex(index), indexTwo: index)
+//			index = getParentIndex(index)
+//		}
+//	}
+
+	private mutating func  minHeapifyUp() {
 		var index = count
-
 		while
 			isMinHeap,
 			let parentElement = getParent(index),
@@ -169,7 +172,11 @@ class Heap<E: Comparable> {
 			swap(indexOne: getParentIndex(index), indexTwo: index)
 			index = getParentIndex(index)
 		}
+	}
 
+
+	private mutating func  maxHeapifyUp() {
+		var index = count
 		while
 			!isMinHeap,
 			let parentElement = getParent(index),
@@ -178,15 +185,77 @@ class Heap<E: Comparable> {
 			swap(indexOne: getParentIndex(index), indexTwo: index)
 			index = getParentIndex(index)
 		}
-
 	}
 
-	private func heapifyDown() { }
+
+	private mutating func minHeapifyDown() {
+		var index = 1 // We are using 1-index
+		while hasLeftChild(index) {
+			var smallerChildIndex = getLeftChildIndex(index)
+			if
+				let leftChild = getLeftChild(index),
+				let rightChild = getRightChild(index),
+				rightChild < leftChild {
+				smallerChildIndex = getRightChildIndex(index)
+			}
+			if
+				let lhs = items[index],
+				let rhs = items[smallerChildIndex],
+				lhs < rhs {
+				break
+			} else {
+				swap(indexOne: index, indexTwo: smallerChildIndex)
+			}
+
+			index = smallerChildIndex
+		}
+	}
+
+	private mutating func maxHeapifyDown() {
+		var index = 1 // We are using 1-index
+		while hasLeftChild(index) {
+			var smallerChildIndex = getLeftChildIndex(index)
+			if
+				let leftChild = getLeftChild(index),
+				let rightChild = getRightChild(index),
+				rightChild > leftChild {
+				smallerChildIndex = getRightChildIndex(index)
+			}
+			if
+				let lhs = items[index],
+				let rhs = items[smallerChildIndex],
+				lhs > rhs {
+				break
+			} else {
+				swap(indexOne: index, indexTwo: smallerChildIndex)
+			}
+
+			index = smallerChildIndex
+		}
+	}
+
+
+	private mutating func heapifyDown() {
+		if isMinHeap {
+			minHeapifyDown()
+		} else {
+			maxHeapifyDown()
+		}
+	}
+
+	private mutating func heapifyUp() {
+		if isMinHeap {
+			minHeapifyUp()
+		} else {
+			maxHeapifyUp()
+		}
+	}
+
 
 
 	// MARK: Publics
 
-	public func add(_ item: E) {
+	public mutating func add(_ item: E) {
 		items.append(item)
 		heapifyUp()
 	}
@@ -196,7 +265,8 @@ class Heap<E: Comparable> {
 	}
 
 	public func peak() -> E? {
-		return nil
+		guard let heapTop = items[1] else { return nil }
+		return heapTop
 	}
 
 }
@@ -232,22 +302,10 @@ extension Heap {
 	*/
 	#if DEBUG
 
-	convenience init(isMinHeap: Bool = true, mockArray: Array<E?> = Array<E?>()) {
+	init(isMinHeap: Bool = true, mockArray: Array<E?> = Array<E?>()) {
 		self.init(isMinHeap: isMinHeap)
 		let joined = items + mockArray[0...]
 		items = joined
-	}
-
-	public func testGetParentIndex(_ index: Int) -> Int {
-		return getParentIndex(index)
-	}
-
-	public func testGetLeftChildIndex(_ index: Int) -> Int {
-		return getLeftChildIndex(index)
-	}
-
-	public func testGetRightChildIndex(_ index: Int) -> Int {
-		return getRightChildIndex(index)
 	}
 
 	public func testHasParent(_ index: Int) -> Bool {
@@ -262,6 +320,18 @@ extension Heap {
 		return hasRightChild(index)
 	}
 
+	public func testGetParentIndex(_ index: Int) -> Int {
+		return getParentIndex(index)
+	}
+
+	public func testGetLeftChildIndex(_ index: Int) -> Int {
+		return getLeftChildIndex(index)
+	}
+
+	public func testGetRightChildIndex(_ index: Int) -> Int {
+		return getRightChildIndex(index)
+	}
+
 	public func testGetParent(_ index: Int) -> E? {
 		return getParent(index)
 	}
@@ -274,8 +344,13 @@ extension Heap {
 		return getRightChild(index)
 	}
 
-	public func testHeapifyUp() -> [E?] {
+	public mutating func testHeapifyUp() -> [E?] {
 		heapifyUp()
+		return items
+	}
+
+	public mutating func testHeapifyDown() -> [E?] {
+		heapifyDown()
 		return items
 	}
 
