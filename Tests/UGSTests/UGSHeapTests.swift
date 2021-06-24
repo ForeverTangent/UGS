@@ -406,4 +406,92 @@ final class UGSHeapTests: XCTestCase {
 
 	}
 
+
+	func testMinHeapPush_01() {
+
+		var testMinHeap = Heap<Int>()
+
+		testMinHeap.push(6)
+		testMinHeap.push(3)
+		testMinHeap.push(1)
+		testMinHeap.push(2)
+		testMinHeap.push(7)
+		testMinHeap.push(4)
+		testMinHeap.push(5)
+
+		print(testMinHeap.items.compactMap{ $0 })
+
+		XCTAssert(testMinHeap.peak() == 1, "testMinHeap.top != 1")
+
+	}
+
+
+	func testMinHeapPush_02() {
+
+		var testMinHeap = Heap<Int>()
+
+		var randomArray = [Int]()
+
+		for _ in 2...1000 {
+			let newElement = Int.random(in: 2...1000)
+			randomArray.append(newElement)
+		}
+
+		for element in randomArray {
+			testMinHeap.push(element)
+		}
+
+		testMinHeap.push(1)
+
+		XCTAssert(testMinHeap.peak() == 1, "testMinHeap.top != 1")
+
+	}
+
+
+
+	func testMinHeapPoll_01() {
+
+		var testMinHeap = Heap<Int>()
+
+		testMinHeap.push(6)
+		testMinHeap.push(3)
+		testMinHeap.push(1)
+		testMinHeap.push(2)
+		testMinHeap.push(7)
+		testMinHeap.push(4)
+		testMinHeap.push(5)
+
+		testMinHeap.poll()
+		testMinHeap.poll()
+		testMinHeap.poll()
+
+		print(testMinHeap.items.compactMap{ $0 })
+
+		XCTAssert(testMinHeap.peak() == 4, "testMinHeap.top != 4")
+
+	}
+
+	func testMinHeapPoll_02() {
+
+		var testMinHeap = Heap<Int>()
+
+		let randomArray = Array(2...1000).shuffled()
+
+		for element in randomArray {
+			testMinHeap.push(element)
+		}
+
+		testMinHeap.push(1)
+
+		for _ in 1...50 {
+			testMinHeap.poll()
+		}
+
+		XCTAssert(testMinHeap.peak() == 51, "testMinHeap.top != 51")
+
+	}
+
+
+
+
 }

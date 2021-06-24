@@ -152,16 +152,6 @@ struct Heap<E: Comparable> {
 		items[0] = nil
 	}
 
-
-
-//	mutating private func heapifyUp() {
-//		var index = items.count - 1
-//		while hasParent(index) && parent(index) > items[index] {
-//			swap(indexOne: getParentIndex(index), indexTwo: index)
-//			index = getParentIndex(index)
-//		}
-//	}
-
 	private mutating func  minHeapifyUp() {
 		var index = count
 		while
@@ -255,13 +245,23 @@ struct Heap<E: Comparable> {
 
 	// MARK: Publics
 
-	public mutating func add(_ item: E) {
+	public mutating func push(_ item: E) {
 		items.append(item)
 		heapifyUp()
 	}
 
-	public func remove() -> E? {
-		return nil
+
+	@discardableResult
+	mutating public func poll() -> E? {
+		if !isEmpty {
+			let topItem = items[1]
+			let lastItem = items.removeLast()
+			items[1] = lastItem
+			heapifyDown()
+			return topItem
+		} else {
+			return nil
+		}
 	}
 
 	public func peak() -> E? {
