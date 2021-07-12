@@ -25,12 +25,16 @@ class AVLNode<E: Comparable & Codable>: Codable {
 }
 
 extension AVLNode: CustomStringConvertible {
-	var description: String {
+	var debugDescription: String {
 
 		let theLeftDescription = left?.description ?? ""
 		let theRightDescription = right?.description ?? ""
 
 		return "V:\(self.data)<LC:[ \(theLeftDescription) ]-LR:[ \(theRightDescription) ]>"
+	}
+
+	var description: String {
+		return self.debugDescription
 	}
 }
 
@@ -63,6 +67,14 @@ class AVLTree<E: Comparable & Codable>: Codable {
 
 
 	// MARK: - Class Methods
+
+
+	public func insert(_ data: E) {
+		if root == nil {
+			let rootNode = AVLNode(data: data)
+			root = rootNode
+		}
+	}
 
 
 	public func containsNodeWith(_ data: E) -> Bool {
@@ -125,6 +137,18 @@ class AVLTree<E: Comparable & Codable>: Codable {
 		return theLeftNodeHeight - theRightNodeHeight
 	}
 
+}
+
+
+extension AVLTree: CustomStringConvertible {
+	var debugDescription: String {
+		guard let root = root else { return "" }
+		return root.description
+	}
+
+	var description: String {
+		return self.debugDescription
+	}
 }
 
 
