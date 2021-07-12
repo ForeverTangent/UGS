@@ -277,7 +277,7 @@ final class UGSHeapTests: XCTestCase {
 
 
 	func testMaxHeapifyUp() {
-		//		var target: [Int?] = [nil]
+
 		var theResults: [Int?] = [Int?]()
 
 		func runTestHeapifyUpWith(mockArray: [Int], target: Int = 1) {
@@ -320,10 +320,6 @@ final class UGSHeapTests: XCTestCase {
 				return
 			}
 			let theLastHalf = getLastHalfOfHeap(mockArray: theResults)
-
-//			print("R: \(theResults)")
-//			print("T: \(top)")
-//			print("LH: \(theLastHalf)")
 
 			XCTAssert(top == 1, "top \(top) != 1")
 			XCTAssert(theLastHalf.contains(targetBottom), "lastHalfOfResults != contain \(targetBottom)")

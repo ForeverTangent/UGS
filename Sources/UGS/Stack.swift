@@ -12,7 +12,7 @@ Stack built on Swift's basic array structure.
 
 The elements can be pretty much anything.
 */
-struct Stack<E> {
+struct Stack<E: Codable>: Codable {
 	var items  = [E]()
 
 	mutating func push(_ item: E) {
