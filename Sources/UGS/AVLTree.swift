@@ -36,7 +36,9 @@ extension AVLNode: CustomStringConvertible {
 		let noBrackets = removeBracketLinesFromString(jsonDescription)
 		var results = "\n"
 		for element in noBrackets {
-			results = results + element.replacingOccurrences(of: "\"data\" : ", with: "").replacingOccurrences(of: ",", with: "")
+			results = results + element
+				.replacingOccurrences(of: "\"data\" : ", with: "")
+				.replacingOccurrences(of: ",", with: "")
 		}
 		return "\nRIGHT\n\(results)\nLEFT\n"
 	}
@@ -74,7 +76,7 @@ This is the BinarySearchTree we are going with.
 // https://medium.com/swift-algorithms-data-structures/learning-advanced-binary-search-tree-algorithms-with-swift-c00588a638fe
 
 */
-class AVLTree<E: Comparable & Codable>: Codable {
+class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 	// MARK: - Properties
 
@@ -100,11 +102,35 @@ class AVLTree<E: Comparable & Codable>: Codable {
 	// MARK: - Class Methods
 
 	public func insert(_ data: E) {
-		if root == nil {
+		if let root = root {
+			insert(data, into: root)
+		} else {
 			let rootNode = AVLNode(data: data)
 			root = rootNode
 		}
 	}
+
+	private func insert(_ data: E, into node: AVLNode<E>) {
+		if data < node.data {
+			if let theLeftNode = node.left {
+				insert(data, into: theLeftNode)
+			} else {
+				node.left = AVLNode(data: data)
+			}
+		} else if data > node.data {
+			if let theRightNode = node.right {
+				insert(data, into: theRightNode)
+			} else {
+				node.right = AVLNode(data: data)
+			}
+		}
+
+//		let results = balanceNode(node)
+//
+//		return results
+
+	}
+
 
 
 	public func containsNodeWith(_ data: E) -> Bool {
@@ -129,10 +155,6 @@ class AVLTree<E: Comparable & Codable>: Codable {
 
 		return nil
 	}
-
-
-
-
 
 
 	/**
@@ -184,6 +206,7 @@ extension AVLTree: CustomStringConvertible {
 		guard let root = root else { return "" }
 		return root.description
 	}
+
 }
 
 
