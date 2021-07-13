@@ -25,17 +25,53 @@ class AVLNode<E: Comparable & Codable>: Codable {
 }
 
 extension AVLNode: CustomStringConvertible {
+
 	var debugDescription: String {
-
-		let theLeftDescription = left?.description ?? ""
-		let theRightDescription = right?.description ?? ""
-
+		let theLeftDescription = left?.debugDescription ?? ""
+		let theRightDescription = right?.debugDescription ?? ""
 		return "V:\(self.data)<LC:[ \(theLeftDescription) ]-LR:[ \(theRightDescription) ]>"
 	}
 
 	var description: String {
-		return self.debugDescription
+		let noBrackets = removeBracketLinesFromString(jsonDescription)
+		var results = "\n"
+		for element in noBrackets {
+			results = results + element.replacingOccurrences(of: "\"data\" : ", with: "").replacingOccurrences(of: ",", with: "")
+		}
+		return "\nRIGHT\n\(results)\nLEFT\n"
 	}
+
+	var jsonDescription: String {
+		let encoder = JSONEncoder()
+		encoder.outputFormatting = .prettyPrinted
+		let data = try? encoder.encode(self)
+		return String(data:data!, encoding: .utf8)!
+	}
+
+
+	fileprivate func removeBracketLinesFromString(_ string: String) -> [String] {
+
+		let workString = "\(string)\n"
+
+
+		let noBrackets = Array(workString.split(separator: "\n"))
+
+		var results = [String]()
+
+		for element in noBrackets {
+			if element.contains("{") {
+			} else if element.contains("}") {
+			} else {
+				results.append("\(element)\n")
+			}
+		}
+
+		return results
+
+	}
+
+
+
 }
 
 
@@ -147,7 +183,8 @@ extension AVLTree: CustomStringConvertible {
 	}
 
 	var description: String {
-		return self.debugDescription
+		guard let root = root else { return "" }
+		return root.description
 	}
 }
 
