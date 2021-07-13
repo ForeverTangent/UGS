@@ -69,6 +69,10 @@ final class UGSAVLTreeTests: XCTestCase {
 		let avlTree = AVLTree<Int>()
 		avlTree.insert(5)
 		print(avlTree)
+		XCTAssert(avlTree.debugDescription == "V:5<LC:[  ]-LR:[  ]>",
+				  "\(avlTree.debugDescription) != V:5<LC:[  ]-LR:[  ]>")
+		print("HEIGHT: \(avlTree.height)\n")
+		XCTAssert(avlTree.height == 1, "\(avlTree.height) != 1")
 
 	}
 

@@ -8,7 +8,7 @@
 import Foundation
 
 
-class AVLNode<E: Comparable & Codable>: Codable {
+class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
 	init(data: E) { self.data = data }
 	var data: E
 	var left: AVLNode<E>?
@@ -41,14 +41,6 @@ extension AVLNode: CustomStringConvertible {
 		return "\nRIGHT\n\(results)\nLEFT\n"
 	}
 
-	var jsonDescription: String {
-		let encoder = JSONEncoder()
-		encoder.outputFormatting = .prettyPrinted
-		let data = try? encoder.encode(self)
-		return String(data:data!, encoding: .utf8)!
-	}
-
-
 	fileprivate func removeBracketLinesFromString(_ string: String) -> [String] {
 
 		let workString = "\(string)\n"
@@ -70,8 +62,6 @@ extension AVLNode: CustomStringConvertible {
 
 	}
 
-
-
 }
 
 
@@ -89,9 +79,14 @@ class AVLTree<E: Comparable & Codable>: Codable {
 	// MARK: - Properties
 
 	private var root: AVLNode<E>?
-	private var height: Int {
+	private var _height: Int {
 		guard let theRoot = root else { return 0 }
 		return theRoot.height
+	}
+	public var height: Int {
+		get {
+			return _height
+		}
 	}
 
 	private var isEmpty: Bool {
@@ -103,7 +98,6 @@ class AVLTree<E: Comparable & Codable>: Codable {
 
 
 	// MARK: - Class Methods
-
 
 	public func insert(_ data: E) {
 		if root == nil {
@@ -135,6 +129,10 @@ class AVLTree<E: Comparable & Codable>: Codable {
 
 		return nil
 	}
+
+
+
+
 
 
 	/**
@@ -179,7 +177,7 @@ class AVLTree<E: Comparable & Codable>: Codable {
 extension AVLTree: CustomStringConvertible {
 	var debugDescription: String {
 		guard let root = root else { return "" }
-		return root.description
+		return root.debugDescription
 	}
 
 	var description: String {

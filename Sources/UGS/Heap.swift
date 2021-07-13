@@ -17,7 +17,7 @@ Starting index at 1.   There are two ways to make a heap with arrays.  One start
 I prefer the 1 index approach, because it lets you reserve the 0-index, if you want to use it for something (like a temporary space).
 
 */
-struct Heap<E: Comparable & Codable>: Codable {
+struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 
 	// MARK: - Properties
 
