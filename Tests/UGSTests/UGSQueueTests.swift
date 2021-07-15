@@ -178,4 +178,38 @@ final class UGSQueueTests: XCTestCase {
 		testEmptyClearWithNumberOfElements(1000000)
 
 	}
+
+	func testQueueCodable() {
+
+		var testQueue = Queue<Int>()
+		for element in 0..<10 {
+			testQueue.push(element)
+		}
+
+		testQueue.pop()
+		testQueue.pop()
+		testQueue.pop()
+
+		// Instantiate an encoder
+		let encoder = JSONEncoder()
+
+		// Pass the Person instance to the encoder's encode(to:) method
+		let encodedData = try! encoder.encode(testQueue)
+		let printedData = String(data: encodedData, encoding: .utf8)!
+		let targetEncodedData = "{\"items\":[3,4,5,6,7,8,9]}"
+
+		XCTAssert(printedData == targetEncodedData, "\(printedData) != \(targetEncodedData)")
+
+		let decoder = JSONDecoder()
+		var decodedData = try! decoder.decode(Queue<Int>.self, from: encodedData)
+		let popped = decodedData.pop()!
+
+		XCTAssert(popped == 3, "popped != 3")
+		let decodedDataString = decodedData.description
+		let targetDecodedData = "FRONT 4, 5, 6, 7, 8, 9, BACK"
+		XCTAssert(decodedDataString == targetDecodedData, "\(decodedDataString) != \(targetDecodedData)")
+
+	}
+
+
 }

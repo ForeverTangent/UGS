@@ -490,4 +490,36 @@ final class UGSHeapTests: XCTestCase {
 
 
 
+	func testHeapCodable() {
+
+		var testHeap = Heap<Int>()
+		for element in 0..<10 {
+			testHeap.push(element)
+		}
+
+		testHeap.poll()
+		testHeap.poll()
+		testHeap.poll()
+
+		// Instantiate an encoder
+		let encoder = JSONEncoder()
+		encoder.outputFormatting = .prettyPrinted
+
+		// Pass the Person instance to the encoder's encode(to:) method
+		let encodedData = try! encoder.encode(testHeap)
+
+//		let encodedDataString = String(data: encodedData, encoding: .utf8)!
+//		print(encodedDataString)
+
+		let decoder = JSONDecoder()
+		var decodedData = try! decoder.decode(Heap<Int>.self, from: encodedData)
+
+		let popped = decodedData.poll()!
+
+		XCTAssert(popped == 3, "popped != 3")
+
+	}
+
+
+
 }

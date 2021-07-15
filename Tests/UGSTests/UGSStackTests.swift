@@ -153,4 +153,39 @@ final class UGSStackTests: XCTestCase {
 
 	}
 
+
+	func testStackCodable() {
+
+		var testStack = Stack<Int>()
+		for element in 0..<10 {
+			testStack.push(element)
+		}
+
+		testStack.pop()
+		testStack.pop()
+		testStack.pop()
+
+		// Instantiate an encoder
+		let encoder = JSONEncoder()
+
+		// Pass the Person instance to the encoder's encode(to:) method
+		let encodedData = try! encoder.encode(testStack)
+		let printedData = String(data: encodedData, encoding: .utf8)!
+
+		let targetEncodedData = "{\"items\":[0,1,2,3,4,5,6]}"
+
+		XCTAssert(printedData == targetEncodedData, "\(printedData) != \(targetEncodedData)")
+
+		let decoder = JSONDecoder()
+		var decodedData = try! decoder.decode(Stack<Int>.self, from: encodedData)
+		let popped = decodedData.pop()!
+
+		XCTAssert(popped == 6, "popped != 6") 
+		let decodedDataString = decodedData.description
+		let targetDecodedData = "TOP 5, 4, 3, 2, 1, 0, BOTTOM"
+		XCTAssert(decodedDataString == targetDecodedData, "\(decodedDataString) != \(targetDecodedData)")
+
+	}
+
+
 }

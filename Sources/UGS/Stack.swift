@@ -19,6 +19,7 @@ struct Stack<E: Codable>: Codable, JSONDescription {
 		items.append(item)
 	}
 
+	@discardableResult
 	mutating func pop() -> E? {
 		guard
 			!items.isEmpty
@@ -54,7 +55,7 @@ extension Stack: CustomStringConvertible {
 	}
 
 	func getStackDescription() -> String {
-		var results = "TOP, "
+		var results = "TOP "
 		// Reversed because it is a stack.
 		for element in items.reversed() {
 			results.append("\(element), ")

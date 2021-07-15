@@ -19,6 +19,7 @@ struct Queue<E: Codable>: Codable, JSONDescription {
 		items.append(item)
 	}
 
+	@discardableResult
 	mutating func pop() -> E? {
 		guard
 			!items.isEmpty
@@ -56,8 +57,8 @@ extension Queue: CustomStringConvertible {
 	}
 
 	func getQueueDescription() -> String {
-		var returnString = "FRONT, "
-		for element in items.reversed() {
+		var returnString = "FRONT "
+		for element in items {
 			returnString.append("\(element), ")
 		}
 		returnString.append("BACK")
