@@ -9,11 +9,14 @@ import Foundation
 
 
 class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
-	init(data: E) { self.data = data }
+
 	var data: E
 	var left: AVLNode<E>?
 	var right: AVLNode<E>?
 
+	/**
+	The Height of the node.
+	*/
 	public var height: Int {
 		get {
 			let theLeftHeight = left?.height ?? 0
@@ -22,7 +25,14 @@ class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
 		}
 	}
 
+	init(data: E, left: AVLNode<E>? = nil, right: AVLNode<E>? = nil) {
+		self.data = data
+		self.left = left
+		self.right = right
+	}
+
 }
+
 
 extension AVLNode: CustomStringConvertible {
 
@@ -157,6 +167,8 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 	}
 
 
+	// MARK: - AVL Balancing
+
 	/**
 	Works double to check hieght and if tree is balanced.
 	- Returns: Int of height, -1 if tree is not balanced.
@@ -190,8 +202,133 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 		let theLeftNodeHeight = node.left?.height ?? 0
 		let theRightNodeHeight = node.right?.height ?? 0
 
-		return theLeftNodeHeight - theRightNodeHeight
+		return abs(theLeftNodeHeight - theRightNodeHeight)
 	}
+
+
+	/**
+	Returns new root  given a node to rotate left.
+
+	-------(1)                              (3)
+	-----------\                           /     \
+	-----------(3)        -->      (1)        (4)
+	----------/      \                      \
+	--------(2)       (4)                  (2)
+
+	- Parameter node: the node to start rotation at.
+	- Returns: the new root.
+	*/
+	private func rotateLeft(_ node: AVLNode<E>) -> AVLNode<E> {
+
+		guard let newRoot = node.right else { return node }
+
+		// If new root has a right child.
+		if let swapNode = newRoot.left {
+			node.right = swapNode
+		} else {
+			node.right = nil
+		}
+
+		newRoot.left = node
+
+		return newRoot
+		
+	}
+
+
+	/**
+	Returns new root  given a node to rotate right.
+
+	------(4)                  (2)
+	-------/                   /     \
+	---(2)        -->  (1)         (4)
+	---/    \                        /
+	(1)    (3)                 (3)
+
+	- Parameter node: the node to start rotation at.
+	- Returns: the new root.
+	*/
+	private func rotateRight(_ node: AVLNode<E>) -> AVLNode<E> {
+
+		guard let newRoot = node.left else { return node }
+
+		// If new root has a right child.
+		if let swapNode = newRoot.right {
+			node.left = swapNode
+		} else {
+			node.left = nil
+		}
+
+		newRoot.right = node
+
+		return newRoot
+
+	}
+
+
+
+	// MARK: - Traversals
+
+	public func transverseInOrder(_ onVisit: (E)->Void) {
+		traverseInOrder(root, onVisit)
+	}
+
+
+	private func traverseInOrder(_ node: AVLNode<E>?, _ onVisit: (E) -> Void) {
+		guard let theNode = node else { return }
+		traverseInOrder(theNode.left, onVisit)
+		onVisit(theNode.data)
+		traverseInOrder(theNode.right, onVisit)
+	}
+
+
+	public func transversePostOrder(_ onVisit: (E)->Void) {
+		traversePostOrder(root, onVisit)
+	}
+
+
+	private func traversePostOrder(_ node: AVLNode<E>?, _ onVisit: (E) -> Void) {
+		guard let theNode = node else { return }
+		traversePostOrder(theNode.right, onVisit)
+		onVisit(theNode.data)
+		traversePostOrder(theNode.left, onVisit)
+	}
+
+
+
+	// MARK: - Minimum and Maximums
+
+	public func getMinimum() -> E? {
+		return getMinimum(root)
+	}
+
+
+	private func getMinimum(_ node: AVLNode<E>?) -> E? {
+		guard let theNode = node else { return nil }
+
+		if let theLeftNode = theNode.left {
+			return getMinimum(theLeftNode)
+		}
+
+		return theNode.data
+	}
+
+
+	public func getMaximum() -> E? {
+		return getMaximum(root)
+	}
+
+
+	private func getMaximum(_ node: AVLNode<E>?) -> E? {
+		guard let theNode = node else { return nil }
+
+		if let theRightNode = theNode.right {
+			return getMaximum(theRightNode)
+		}
+
+		return theNode.data
+	}
+
 
 }
 
@@ -207,6 +344,34 @@ extension AVLTree: CustomStringConvertible {
 		return root.description
 	}
 
+	// MARK: - Traversal Debugs
+
+	public func getDebugOfAllInOrder() -> String {
+		var allData = [E]()
+		transverseInOrder { (theData) in
+			allData.append(theData)
+		}
+		var results = ""
+		for element in allData {
+			results = "\(results)|\(element)"
+		}
+		results = "\(results)|"
+		return results
+	}
+
+	public func getDebugOfAllPostOrder() -> String {
+		var allData = [E]()
+		transversePostOrder { (theData) in
+			allData.append(theData)
+		}
+		var results = ""
+		for element in allData {
+			results = "\(results)|\(element)"
+		}
+		results = "\(results)|"
+		return results
+	}
+
 }
 
 
@@ -218,7 +383,26 @@ extension AVLTree {
 	*/
 	#if DEBUG
 
+	public var testRoot: AVLNode<E>? {
+		get {
+			return root
+		}
+		set {
+			root = newValue
+		}
+	}
 
+	public func testGetBalanceFactorOfNode(_ node: AVLNode<E>) -> Int {
+		return getBalanceFactorOfNode(node)
+	}
+
+	public func testRotateLeft(_ node: AVLNode<E>) -> AVLNode<E> {
+		return rotateLeft(node)
+	}
+
+	public func testRotateRight(_ node: AVLNode<E>) -> AVLNode<E> {
+		return rotateRight(node)
+	}
 
 	#endif
 
