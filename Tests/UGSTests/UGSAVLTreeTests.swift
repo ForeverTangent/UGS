@@ -67,6 +67,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTree0() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		print(avlTree)
 		XCTAssert(avlTree.debugDescription == "V:5<LC:[  ]-LR:[  ]>",
@@ -79,6 +80,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTreeInsertLeft1() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		print(avlTree)
 		XCTAssert(avlTree.debugDescription == "V:5<LC:[  ]-LR:[  ]>",
@@ -92,11 +94,13 @@ final class UGSAVLTreeTests: XCTestCase {
 		print("\(avlTree.debugDescription)\n")
 		print("HEIGHT: \(avlTree.height)\n")
 		XCTAssert(avlTree.height == 2, "\(avlTree.height) != 1")
+		print(avlTree)
 
 	}
 
 	func testAVLTreeInsertRight1() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		print(avlTree)
 		XCTAssert(avlTree.debugDescription == "V:5<LC:[  ]-LR:[  ]>",
@@ -115,6 +119,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTreeInsertLeftLeft1() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		print(avlTree)
 		XCTAssert(avlTree.debugDescription == "V:5<LC:[  ]-LR:[  ]>",
@@ -138,6 +143,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTreeInsertLeftRight1() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		print(avlTree)
 		XCTAssert(avlTree.debugDescription == "V:5<LC:[  ]-LR:[  ]>",
@@ -163,6 +169,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTreeIntsert1() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		avlTree.insert(3)
 		avlTree.insert(4)
@@ -182,6 +189,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTreeMin() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		avlTree.insert(3)
 		avlTree.insert(4)
@@ -197,6 +205,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLTreeMax() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		avlTree.insert(3)
 		avlTree.insert(4)
@@ -213,6 +222,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLInOrderDebug() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		avlTree.insert(3)
 		avlTree.insert(4)
@@ -229,6 +239,7 @@ final class UGSAVLTreeTests: XCTestCase {
 
 	func testAVLPostOrderDebug() {
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		avlTree.insert(5)
 		avlTree.insert(3)
 		avlTree.insert(4)
@@ -247,6 +258,7 @@ final class UGSAVLTreeTests: XCTestCase {
 	func testBalanceFactor() {
 
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 		var results = 0
 
 		func checkRootBalanceTarget(_ target: Int) {
@@ -262,33 +274,33 @@ final class UGSAVLTreeTests: XCTestCase {
 		guard let root = avlTree.testRoot else { return }
 
 		avlTree.insert(3)
-		checkRootBalanceTarget(1)
+		checkRootBalanceTarget(-1)
 		results = avlTree.testGetBalanceFactorOfNode(root.left!)
 		XCTAssert(results == 0, "\(results) == 0")
 
 		avlTree.insert(4)
-		checkRootBalanceTarget(2)
+		checkRootBalanceTarget(-2)
 		results = avlTree.testGetBalanceFactorOfNode(root.left!)
 		XCTAssert(results == 1, "\(results) == 1")
 		results = avlTree.testGetBalanceFactorOfNode(root.left!.right!)
 		XCTAssert(results == 0, "\(results) == 0")
 
 		avlTree.insert(2)
-		checkRootBalanceTarget(2)
+		checkRootBalanceTarget(-2)
 		results = avlTree.testGetBalanceFactorOfNode(root.left!)
 		XCTAssert(results == 0, "\(results) == 0")
 		results = avlTree.testGetBalanceFactorOfNode(root.left!.left!)
 		XCTAssert(results == 0, "\(results) == 0")
 
 		avlTree.insert(7)
-		checkRootBalanceTarget(1)
+		checkRootBalanceTarget(-1)
 		results = avlTree.testGetBalanceFactorOfNode(root.right!)
 		XCTAssert(results == 0, "\(results) == 0")
 
 		avlTree.insert(6)
 		checkRootBalanceTarget(0)
 		results = avlTree.testGetBalanceFactorOfNode(root.right!)
-		XCTAssert(results == 1, "\(results) == 1")
+		XCTAssert(results == -1, "\(results) != -1")
 		results = avlTree.testGetBalanceFactorOfNode(root.right!.left!)
 		XCTAssert(results == 0, "\(results) == 0")
 
@@ -306,6 +318,7 @@ final class UGSAVLTreeTests: XCTestCase {
 	func testRotateRight1() {
 
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 
 		let avlNode = AVLNode(data: 5)
 		let avlNodeLeft = AVLNode(data: 3)
@@ -331,6 +344,7 @@ final class UGSAVLTreeTests: XCTestCase {
 	func testRotateRight2() {
 
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 
 		let avlNode = AVLNode(data: 5)
 		let avlNodeLeft = AVLNode(data: 3)
@@ -354,6 +368,7 @@ final class UGSAVLTreeTests: XCTestCase {
 	func testRotateLeft1() {
 
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 
 		let avlNode = AVLNode(data: 5)
 		let avlNodeRight = AVLNode(data: 7)
@@ -380,6 +395,7 @@ final class UGSAVLTreeTests: XCTestCase {
 	func testRotateLeft2() {
 
 		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
 
 		let avlNode = AVLNode(data: 5)
 		let avlNodeRight = AVLNode(data: 7)
@@ -396,6 +412,25 @@ final class UGSAVLTreeTests: XCTestCase {
 		let target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]>"
 		let result = avlTree.debugDescription
 		XCTAssert(result == target, "\(result) != \(target)")
+
+	}
+
+
+	func testBalancing() {
+
+		let avlTree = AVLTree<Int>()
+
+		avlTree.insert(5)
+		print(avlTree)
+		avlTree.insert(7)
+		print(avlTree)
+		avlTree.insert(9)
+		print(avlTree)
+		avlTree.insert(11)
+		print(avlTree)
+		let target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]>"
+		let result = avlTree.debugDescription
+//		XCTAssert(result == target, "\(result) != \(target)")
 
 	}
 

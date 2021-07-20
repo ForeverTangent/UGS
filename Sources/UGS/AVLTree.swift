@@ -14,6 +14,8 @@ class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
 	var left: AVLNode<E>?
 	var right: AVLNode<E>?
 
+
+
 	/**
 	The Height of the node.
 	*/
@@ -101,6 +103,8 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 		}
 	}
 
+	public var useBalancing = true
+
 	private var isEmpty: Bool {
 		get {
 			guard root != nil else { return false }
@@ -112,32 +116,32 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 	// MARK: - Class Methods
 
 	public func insert(_ data: E) {
-		if let root = root {
-			insert(data, into: root)
-		} else {
-			let rootNode = AVLNode(data: data)
-			root = rootNode
-		}
+		self.root = insert(data, into: self.root)
 	}
 
-	private func insert(_ data: E, into node: AVLNode<E>) {
+	@discardableResult
+	private func insert(_ data: E, into node: AVLNode<E>?) -> AVLNode<E>? {
+		guard var node = node else {
+			return AVLNode(data: data)
+		}
+
 		if data < node.data {
-			if let theLeftNode = node.left {
-				insert(data, into: theLeftNode)
-			} else {
-				node.left = AVLNode(data: data)
-			}
+			node.left = insert(data, into: node.left)
 		} else if data > node.data {
-			if let theRightNode = node.right {
-				insert(data, into: theRightNode)
-			} else {
-				node.right = AVLNode(data: data)
+			node.right = insert(data, into: node.right)
+		}
+
+		if useBalancing {
+			let balanceFactor = getBalanceFactorOfNode(node)
+
+			if balanceFactor <= -2 {
+				node = rotateRight(node)
+			} else if 2 <= balanceFactor {
+				node = rotateLeft(node)
 			}
 		}
 
-//		let results = balanceNode(node)
-//
-//		return results
+		return node
 
 	}
 
@@ -173,28 +177,28 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 	Works double to check hieght and if tree is balanced.
 	- Returns: Int of height, -1 if tree is not balanced.
 	*/
-	private func checkHeight(_ node: AVLNode<E>?) -> Int {
-		guard let theNode = node else { return 0 }
-
-		let leftHeight = checkHeight(theNode.left)
-		if leftHeight == -1 {
-			return -1
-		}
-
-		let rightHeight = checkHeight(theNode.right)
-		if rightHeight == -1 {
-			return -1
-		}
-
-		let heightDifference = abs(leftHeight - rightHeight)
-
-		if heightDifference > 1 {
-			return -1
-		} else {
-			return max(leftHeight, rightHeight) + 1
-		}
-
-	}
+//	private func checkHeight(_ node: AVLNode<E>?) -> Int {
+//		guard let theNode = node else { return 0 }
+//
+//		let leftHeight = checkHeight(theNode.left)
+//		if leftHeight == -1 {
+//			return -1
+//		}
+//
+//		let rightHeight = checkHeight(theNode.right)
+//		if rightHeight == -1 {
+//			return -1
+//		}
+//
+//		let heightDifference = abs(leftHeight - rightHeight)
+//
+//		if heightDifference > 1 {
+//			return -1
+//		} else {
+//			return max(leftHeight, rightHeight) + 1
+//		}
+//
+//	}
 
 
 	private func getBalanceFactorOfNode(_ node: AVLNode<E>) -> Int {
@@ -202,7 +206,7 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 		let theLeftNodeHeight = node.left?.height ?? 0
 		let theRightNodeHeight = node.right?.height ?? 0
 
-		return abs(theLeftNodeHeight - theRightNodeHeight)
+		return theRightNodeHeight - theLeftNodeHeight
 	}
 
 
