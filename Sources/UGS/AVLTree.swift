@@ -105,6 +105,8 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 	public var useBalancing = true
 
+	public var count = 0
+
 	private var isEmpty: Bool {
 		get {
 			guard root != nil else { return false }
@@ -117,6 +119,8 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 	public func insert(_ data: E) {
 		self.root = insert(data, into: self.root)
+
+		count += 1
 	}
 
 	@discardableResult
@@ -172,33 +176,6 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 
 	// MARK: - AVL Balancing
-
-	/**
-	Works double to check hieght and if tree is balanced.
-	- Returns: Int of height, -1 if tree is not balanced.
-	*/
-//	private func checkHeight(_ node: AVLNode<E>?) -> Int {
-//		guard let theNode = node else { return 0 }
-//
-//		let leftHeight = checkHeight(theNode.left)
-//		if leftHeight == -1 {
-//			return -1
-//		}
-//
-//		let rightHeight = checkHeight(theNode.right)
-//		if rightHeight == -1 {
-//			return -1
-//		}
-//
-//		let heightDifference = abs(leftHeight - rightHeight)
-//
-//		if heightDifference > 1 {
-//			return -1
-//		} else {
-//			return max(leftHeight, rightHeight) + 1
-//		}
-//
-//	}
 
 
 	private func getBalanceFactorOfNode(_ node: AVLNode<E>) -> Int {

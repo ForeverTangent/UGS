@@ -357,7 +357,6 @@ final class UGSAVLTreeTests: XCTestCase {
 
 		avlTree.testRoot = avlTree.testRotateRight(avlTree.testRoot!)
 
-//		print(avlTree.debugDescription)
 		let target = "V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[ V:5<LC:[  ]-LR:[  ]> ]>"
 		let result = avlTree.debugDescription
 		XCTAssert(result == target, "\(result) != \(target)")
@@ -383,7 +382,6 @@ final class UGSAVLTreeTests: XCTestCase {
 
 		avlTree.testRoot = avlTree.testRotateLeft(avlTree.testRoot!)
 
-//		print(avlTree.debugDescription)
 		let target = "V:7<LC:[ V:5<LC:[  ]-LR:[ V:6<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]>"
 		let result = avlTree.debugDescription
 		XCTAssert(result == target, "\(result) != \(target)")
@@ -408,7 +406,6 @@ final class UGSAVLTreeTests: XCTestCase {
 
 		avlTree.testRoot = avlTree.testRotateLeft(avlTree.testRoot!)
 
-//		print(avlTree.debugDescription)
 		let target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]>"
 		let result = avlTree.debugDescription
 		XCTAssert(result == target, "\(result) != \(target)")
@@ -416,24 +413,183 @@ final class UGSAVLTreeTests: XCTestCase {
 	}
 
 
-	func testBalancing() {
+	func testBalancingRotateLefts1() {
 
 		let avlTree = AVLTree<Int>()
 
+		var target = ""
+		var result = ""
+
 		avlTree.insert(5)
-		print(avlTree)
+		result = avlTree.debugDescription
+		target = "V:5<LC:[  ]-LR:[  ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
 		avlTree.insert(7)
-		print(avlTree)
+		result = avlTree.debugDescription
+		target = "V:5<LC:[  ]-LR:[ V:7<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
 		avlTree.insert(9)
-		print(avlTree)
+		result = avlTree.debugDescription
+		target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
 		avlTree.insert(11)
-		print(avlTree)
-		let target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]>"
-		let result = avlTree.debugDescription
-//		XCTAssert(result == target, "\(result) != \(target)")
+		result = avlTree.debugDescription
+		target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[ V:11<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(13)
+		result = avlTree.debugDescription
+		target = "V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:11<LC:[ V:9<LC:[  ]-LR:[  ]> ]-LR:[ V:13<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(15)
+		result = avlTree.debugDescription
+		target = "V:11<LC:[ V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:13<LC:[  ]-LR:[ V:15<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(17)
+		result = avlTree.debugDescription
+		target = "V:11<LC:[ V:7<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:15<LC:[ V:13<LC:[  ]-LR:[  ]> ]-LR:[ V:17<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
 
 	}
 
+
+	func testBalancingRotateRights1() {
+
+		let avlTree = AVLTree<Int>()
+
+		var target = ""
+		var result = ""
+
+		avlTree.insert(25)
+		result = avlTree.debugDescription
+		target = "V:25<LC:[  ]-LR:[  ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(21)
+		result = avlTree.debugDescription
+		target = "V:25<LC:[ V:21<LC:[  ]-LR:[  ]> ]-LR:[  ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(19)
+		result = avlTree.debugDescription
+		target = "V:21<LC:[ V:19<LC:[  ]-LR:[  ]> ]-LR:[ V:25<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(17)
+		result = avlTree.debugDescription
+		target = "V:21<LC:[ V:19<LC:[ V:17<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:25<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(15)
+		result = avlTree.debugDescription
+		target = "V:21<LC:[ V:17<LC:[ V:15<LC:[  ]-LR:[  ]> ]-LR:[ V:19<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:25<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(13)
+		result = avlTree.debugDescription
+		target = "V:17<LC:[ V:15<LC:[ V:13<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:21<LC:[ V:19<LC:[  ]-LR:[  ]> ]-LR:[ V:25<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+		avlTree.insert(11)
+		result = avlTree.debugDescription
+		target = "V:17<LC:[ V:13<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:15<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:21<LC:[ V:19<LC:[  ]-LR:[  ]> ]-LR:[ V:25<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+
+	}
+
+
+	func testBalancingAlternating1() {
+
+		let avlTree = AVLTree<Int>()
+
+		var target = ""
+		var result = ""
+
+		avlTree.insert(10)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[  ]-LR:[  ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 1, "\(avlTree.count) != 1")
+
+		avlTree.insert(9)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:9<LC:[  ]-LR:[  ]> ]-LR:[  ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 2, "\(avlTree.count) != 2")
+
+		avlTree.insert(11)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:9<LC:[  ]-LR:[  ]> ]-LR:[ V:11<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 3, "\(avlTree.count) != 3")
+
+		avlTree.insert(8)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:9<LC:[ V:8<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:11<LC:[  ]-LR:[  ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 4, "\(avlTree.count) != 4")
+
+		avlTree.insert(12)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:9<LC:[ V:8<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:11<LC:[  ]-LR:[ V:12<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 5, "\(avlTree.count) != 5")
+
+		avlTree.insert(8)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:9<LC:[ V:8<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:11<LC:[  ]-LR:[ V:12<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 6, "\(avlTree.count) != 6")
+
+		avlTree.insert(13)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:9<LC:[ V:8<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:13<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 7, "\(avlTree.count) != 7")
+
+		avlTree.insert(7)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:8<LC:[ V:7<LC:[  ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:13<LC:[  ]-LR:[  ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 8, "\(avlTree.count) != 8")
+
+		avlTree.insert(14)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:8<LC:[ V:7<LC:[  ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:13<LC:[  ]-LR:[ V:14<LC:[  ]-LR:[  ]> ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 9, "\(avlTree.count) != 9")
+
+		avlTree.insert(6)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:8<LC:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:13<LC:[  ]-LR:[ V:14<LC:[  ]-LR:[  ]> ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 10, "\(avlTree.count) != 10")
+
+		avlTree.insert(15)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:8<LC:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:14<LC:[ V:13<LC:[  ]-LR:[  ]> ]-LR:[ V:15<LC:[  ]-LR:[  ]> ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 11, "\(avlTree.count) != 11")
+
+		avlTree.insert(5)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:8<LC:[ V:6<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:7<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:14<LC:[ V:13<LC:[  ]-LR:[  ]> ]-LR:[ V:15<LC:[  ]-LR:[  ]> ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 12, "\(avlTree.count) != 12")
+
+		avlTree.insert(16)
+		result = avlTree.debugDescription
+		target = "V:10<LC:[ V:8<LC:[ V:6<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:7<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:9<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:14<LC:[ V:12<LC:[ V:11<LC:[  ]-LR:[  ]> ]-LR:[ V:13<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:15<LC:[  ]-LR:[ V:16<LC:[  ]-LR:[  ]> ]> ]> ]>"
+		XCTAssert(result == target, "\(result) != \(target)")
+		XCTAssert(avlTree.count == 13, "\(avlTree.count) != 13")
+
+
+	}
 
 
 
