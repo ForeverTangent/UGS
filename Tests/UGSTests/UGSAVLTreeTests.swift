@@ -592,5 +592,86 @@ final class UGSAVLTreeTests: XCTestCase {
 	}
 
 
+	func testAVLTreeRemove1() {
+		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
+		avlTree.insert(5)
+		avlTree.insert(3)
+		avlTree.insert(4)
+		avlTree.insert(2)
+		avlTree.insert(7)
+		avlTree.insert(6)
+		avlTree.insert(8)
+
+		let debugDescription = avlTree.debugDescription
+
+		print("Before")
+		print(avlTree.description)
+
+		avlTree.remove(data: 4)
+
+		print("After")
+		print(avlTree.description)
+
+	}
+
+
+	func testAVLTreeRemove2() {
+		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
+		avlTree.insert(5)
+		avlTree.insert(3)
+		avlTree.insert(4)
+		avlTree.insert(2)
+		avlTree.insert(7)
+		avlTree.insert(6)
+		avlTree.insert(8)
+
+		let debugDescription = avlTree.debugDescription
+
+		print("Before")
+		print(avlTree.description)
+
+		avlTree.remove(data: 5)
+
+		print("After")
+		print(avlTree.description)
+
+	}
+
+
+	func testAVLTreeRemove3() {
+		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = true
+		avlTree.insert(7)
+		avlTree.insert(6)
+		avlTree.insert(5)
+		avlTree.insert(4)
+		avlTree.insert(3)
+		avlTree.insert(2)
+		avlTree.insert(1)
+		avlTree.insert(8)
+		avlTree.insert(9)
+		avlTree.insert(10)
+		avlTree.insert(11)
+		avlTree.insert(12)
+		avlTree.insert(14)
+		avlTree.insert(13)
+		avlTree.insert(15)
+
+		let debugDescription = avlTree.debugDescription
+
+		print("Before")
+		print(avlTree.description)
+
+//		avlTree.remove(data: 8, node: &avlTree.testRoot)
+		avlTree.remove(data: 8)
+
+		print("After")
+		print(avlTree.description)
+
+	}
+
+
 
 }

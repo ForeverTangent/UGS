@@ -17,8 +17,8 @@ class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
 
 
 	/**
-	The Height of the node.
-	*/
+	 The Height of the node.
+	 */
 	public var height: Int {
 		get {
 			let theLeftHeight = left?.height ?? 0
@@ -82,12 +82,12 @@ extension AVLNode: CustomStringConvertible {
 
 
 /**
-This is the BinarySearchTree we are going with.
+ This is the BinarySearchTree we are going with.
 
-[Based off code here] (https://github.com/danmitu/BST/blob/master/Swift-BST/BST.swift)
-// https://medium.com/swift-algorithms-data-structures/learning-advanced-binary-search-tree-algorithms-with-swift-c00588a638fe
+ [Based off code here] (https://github.com/danmitu/BST/blob/master/Swift-BST/BST.swift)
+ // https://medium.com/swift-algorithms-data-structures/learning-advanced-binary-search-tree-algorithms-with-swift-c00588a638fe
 
-*/
+ */
 class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 	// MARK: - Properties
@@ -188,17 +188,17 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 
 	/**
-	Returns new root  given a node to rotate left.
+	 Returns new root  given a node to rotate left.
 
-	-------(1)                              (3)
-	-----------\                           /     \
-	-----------(3)        -->      (1)        (4)
-	----------/      \                      \
-	--------(2)       (4)                  (2)
+	 -------(1)                              (3)
+	 -----------\                           /     \
+	 -----------(3)        -->      (1)        (4)
+	 ----------/      \                      \
+	 --------(2)       (4)                  (2)
 
-	- Parameter node: the node to start rotation at.
-	- Returns: the new root.
-	*/
+	 - Parameter node: the node to start rotation at.
+	 - Returns: the new root.
+	 */
 	private func rotateLeft(_ node: AVLNode<E>) -> AVLNode<E> {
 
 		guard let newRoot = node.right else { return node }
@@ -218,17 +218,17 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 
 	/**
-	Returns new root  given a node to rotate right.
+	 Returns new root  given a node to rotate right.
 
-	------(4)                  (2)
-	-------/                   /     \
-	---(2)        -->  (1)         (4)
-	---/    \                        /
-	(1)    (3)                 (3)
+	 ------(4)                  (2)
+	 -------/                   /     \
+	 ---(2)        -->  (1)         (4)
+	 ---/    \                        /
+	 (1)    (3)                 (3)
 
-	- Parameter node: the node to start rotation at.
-	- Returns: the new root.
-	*/
+	 - Parameter node: the node to start rotation at.
+	 - Returns: the new root.
+	 */
 	private func rotateRight(_ node: AVLNode<E>) -> AVLNode<E> {
 
 		guard let newRoot = node.left else { return node }
@@ -248,30 +248,103 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 
 
 
+	public func remove(data: E) {
+
+		remove(data: data, node: &self.root)
+
+		// Unwrap for later on.
+		guard var node = root else { return }
+
+		if useBalancing {
+			let balanceFactor = getBalanceFactorOfNode(node)
+
+			if balanceFactor <= -2 {
+				node = rotateRight(node)
+			} else if 2 <= balanceFactor {
+				node = rotateLeft(node)
+			}
+		}
+	}
+
+
+	private func remove(data: E, node root: inout AVLNode<E>?) {
+
+		// Unwrap for later on.
+		guard let node = root else { return }
+
+		if data < node.data {
+			self.remove(data: data, node: &node.left)
+		} else if data > node.data {
+			self.remove(data: data, node: &node.right)
+		} else {
+
+			/// This is a leaf node so just remove it
+			if node.left == nil && node.right == nil {
+				root = nil
+			} else if node.right == nil,
+					  let left = node.left {
+				// Node has single child (left)
+				// Make it the root
+
+				root = left
+
+			} else if node.left == nil,
+					  let right = node.right {
+				// Node has single child (right)
+				// Make it the root
+				root = right
+
+			} else {
+				// Node has left and right children
+				// We need to pick a side, so we try left first then right.
+				// We swap the data the the appropriate min/max and then delete the old data in the swap
+				if let swapMax = getNodeMaximum(node.left) {
+					let oldData = node.data
+					node.data = swapMax.data
+					swapMax.data = oldData
+					root = node
+					remove(data: oldData, node: &node.left)
+				} else if let swapMin = getNodeMinimum(node.right) {
+					let oldData = node.data
+					node.data = swapMin.data
+					swapMin.data = oldData
+					root = node
+					remove(data: oldData, node: &node.right)
+				}
+			}
+		}
+
+
+	}
+
+
+
+
+
 	// MARK: - Traversals
 
-	public func transverseInOrder(_ onVisit: (E)->Void) {
+	public func transverseInOrder(_ onVisit: (AVLNode<E>)->Void) {
 		traverseInOrder(root, onVisit)
 	}
 
 
-	private func traverseInOrder(_ node: AVLNode<E>?, _ onVisit: (E) -> Void) {
+	private func traverseInOrder(_ node: AVLNode<E>?, _ onVisit: (AVLNode<E>) -> Void) {
 		guard let theNode = node else { return }
 		traverseInOrder(theNode.left, onVisit)
-		onVisit(theNode.data)
+		onVisit(theNode)
 		traverseInOrder(theNode.right, onVisit)
 	}
 
 
-	public func transversePostOrder(_ onVisit: (E)->Void) {
+	public func transversePostOrder(_ onVisit: (AVLNode<E>)->Void) {
 		traversePostOrder(root, onVisit)
 	}
 
 
-	private func traversePostOrder(_ node: AVLNode<E>?, _ onVisit: (E) -> Void) {
+	private func traversePostOrder(_ node: AVLNode<E>?, _ onVisit: (AVLNode<E>) -> Void) {
 		guard let theNode = node else { return }
 		traversePostOrder(theNode.right, onVisit)
-		onVisit(theNode.data)
+		onVisit(theNode)
 		traversePostOrder(theNode.left, onVisit)
 	}
 
@@ -280,34 +353,34 @@ class AVLTree<E: Comparable & Codable>: Codable, JSONDescription {
 	// MARK: - Minimum and Maximums
 
 	public func getMinimum() -> E? {
-		return getMinimum(root)
+		return getNodeMinimum(root)?.data
 	}
 
 
-	private func getMinimum(_ node: AVLNode<E>?) -> E? {
-		guard let theNode = node else { return nil }
+	private func getNodeMinimum(_ node: AVLNode<E>?) -> AVLNode<E>? {
+		guard let node = node else { return nil }
 
-		if let theLeftNode = theNode.left {
-			return getMinimum(theLeftNode)
+		if let leftNode = node.left {
+			return getNodeMinimum(leftNode)
 		}
 
-		return theNode.data
+		return node
 	}
 
 
 	public func getMaximum() -> E? {
-		return getMaximum(root)
+		return getNodeMaximum(root)?.data
 	}
 
 
-	private func getMaximum(_ node: AVLNode<E>?) -> E? {
-		guard let theNode = node else { return nil }
+	private func getNodeMaximum(_ node: AVLNode<E>?) -> AVLNode<E>? {
+		guard let node = node else { return nil }
 
-		if let theRightNode = theNode.right {
-			return getMaximum(theRightNode)
+		if let rightNode = node.right {
+			return getNodeMaximum(rightNode)
 		}
 
-		return theNode.data
+		return node
 	}
 
 
@@ -329,8 +402,8 @@ extension AVLTree: CustomStringConvertible {
 
 	public func getDebugOfAllInOrder() -> String {
 		var allData = [E]()
-		transverseInOrder { (theData) in
-			allData.append(theData)
+		transverseInOrder { (node) in
+			allData.append(node.data)
 		}
 		var results = ""
 		for element in allData {
@@ -342,8 +415,8 @@ extension AVLTree: CustomStringConvertible {
 
 	public func getDebugOfAllPostOrder() -> String {
 		var allData = [E]()
-		transversePostOrder { (theData) in
-			allData.append(theData)
+		transversePostOrder { (node) in
+			allData.append(node.data)
 		}
 		var results = ""
 		for element in allData {
@@ -360,9 +433,9 @@ extension AVLTree: CustomStringConvertible {
 
 extension AVLTree {
 	/**
-	These are public accessors for the private function for the Unit Tests.
-	*/
-	#if DEBUG
+	 These are public accessors for the private function for the Unit Tests.
+	 */
+#if DEBUG
 
 	public var testRoot: AVLNode<E>? {
 		get {
@@ -385,7 +458,7 @@ extension AVLTree {
 		return rotateRight(node)
 	}
 
-	#endif
+#endif
 
 
-	}
+}
