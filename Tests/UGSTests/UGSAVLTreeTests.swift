@@ -592,6 +592,33 @@ final class UGSAVLTreeTests: XCTestCase {
 	}
 
 
+	func testAVLTreeRemove0() {
+		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
+		avlTree.insert(5)
+		avlTree.insert(3)
+		avlTree.insert(4)
+		avlTree.insert(2)
+		avlTree.insert(7)
+		avlTree.insert(6)
+		avlTree.insert(8)
+
+		var debugDescription = avlTree.debugDescription
+		var target = "V:5<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[ V:4<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
+
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
+		avlTree.remove(data: 5)
+//
+		debugDescription = avlTree.debugDescription
+		target = "V:4<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
+
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
+	}
+
+
+
 	func testAVLTreeRemove1() {
 		let avlTree = AVLTree<Int>()
 		avlTree.useBalancing = false
@@ -603,17 +630,26 @@ final class UGSAVLTreeTests: XCTestCase {
 		avlTree.insert(6)
 		avlTree.insert(8)
 
-		let debugDescription = avlTree.debugDescription
+		var debugDescription = avlTree.debugDescription
+		var target = "V:5<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[ V:4<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
 
 		print("Before")
 		print(avlTree.description)
 
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
 		avlTree.remove(data: 4)
+
+		debugDescription = avlTree.debugDescription
+		target = "V:5<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
 
 		print("After")
 		print(avlTree.description)
 
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
 	}
+
 
 
 	func testAVLTreeRemove2() {
@@ -627,20 +663,62 @@ final class UGSAVLTreeTests: XCTestCase {
 		avlTree.insert(6)
 		avlTree.insert(8)
 
-		let debugDescription = avlTree.debugDescription
+		var debugDescription = avlTree.debugDescription
+		var target = "V:5<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[ V:4<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
 
 		print("Before")
 		print(avlTree.description)
 
-		avlTree.remove(data: 5)
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
+		avlTree.remove(data: 3)
+
+		debugDescription = avlTree.debugDescription
+		target = "V:5<LC:[ V:2<LC:[  ]-LR:[ V:4<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
 
 		print("After")
 		print(avlTree.description)
+
+		XCTAssert(debugDescription == target, "debugDescription != target")
 
 	}
 
 
 	func testAVLTreeRemove3() {
+		let avlTree = AVLTree<Int>()
+		avlTree.useBalancing = false
+		avlTree.insert(5)
+		avlTree.insert(3)
+		avlTree.insert(4)
+		avlTree.insert(2)
+		avlTree.insert(7)
+		avlTree.insert(6)
+		avlTree.insert(8)
+
+		var debugDescription = avlTree.debugDescription
+		var target = "V:5<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[ V:4<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:7<LC:[ V:6<LC:[  ]-LR:[  ]> ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
+
+		print("Before")
+		print(avlTree.description)
+
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
+		avlTree.remove(data: 7)
+
+		debugDescription = avlTree.debugDescription
+		target = "V:5<LC:[ V:3<LC:[ V:2<LC:[  ]-LR:[  ]> ]-LR:[ V:4<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:6<LC:[  ]-LR:[ V:8<LC:[  ]-LR:[  ]> ]> ]>"
+
+		print("After")
+		print(avlTree.description)
+
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
+	}
+
+
+
+
+	func testAVLTreeRemove4() {
 		let avlTree = AVLTree<Int>()
 		avlTree.useBalancing = true
 		avlTree.insert(7)
@@ -659,16 +737,27 @@ final class UGSAVLTreeTests: XCTestCase {
 		avlTree.insert(13)
 		avlTree.insert(15)
 
-		let debugDescription = avlTree.debugDescription
+		var debugDescription = avlTree.debugDescription
+		var target = "V:8<LC:[ V:4<LC:[ V:2<LC:[ V:1<LC:[  ]-LR:[  ]> ]-LR:[ V:3<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:6<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:7<LC:[  ]-LR:[  ]> ]> ]> ]-LR:[ V:12<LC:[ V:10<LC:[ V:9<LC:[  ]-LR:[  ]> ]-LR:[ V:11<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:14<LC:[ V:13<LC:[  ]-LR:[  ]> ]-LR:[ V:15<LC:[  ]-LR:[  ]> ]> ]> ]>"
 
-		print("Before")
-		print(avlTree.description)
+//		print("Before")
+//		print(avlTree.description)
 
-//		avlTree.remove(data: 8, node: &avlTree.testRoot)
-		avlTree.remove(data: 8)
+		XCTAssert(debugDescription == target, "debugDescription != target")
 
-		print("After")
-		print(avlTree.description)
+		avlTree.remove(data: 4)
+
+		debugDescription = avlTree.debugDescription
+		target = "V:8<LC:[ V:3<LC:[ V:2<LC:[ V:1<LC:[  ]-LR:[  ]> ]-LR:[  ]> ]-LR:[ V:6<LC:[ V:5<LC:[  ]-LR:[  ]> ]-LR:[ V:7<LC:[  ]-LR:[  ]> ]> ]> ]-LR:[ V:12<LC:[ V:10<LC:[ V:9<LC:[  ]-LR:[  ]> ]-LR:[ V:11<LC:[  ]-LR:[  ]> ]> ]-LR:[ V:14<LC:[ V:13<LC:[  ]-LR:[  ]> ]-LR:[ V:15<LC:[  ]-LR:[  ]> ]> ]> ]>"
+
+
+//		print("After")
+//		print(avlTree.description)
+//
+		print(debugDescription)
+
+		XCTAssert(debugDescription == target, "debugDescription != target")
+
 
 	}
 
