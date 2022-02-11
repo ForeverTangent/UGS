@@ -159,6 +159,131 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 
 	// MARK: - Graph Algorhythms
 
+	/**
+	 	Breadth First Search
+	 - Parameter data: T
+	 - Parameter vertex: Vertex to start search from, optional.
+	 - Returns: Vertex<T>?
+	 */
+	public func breadthFirstSearch(forData data: T,
+								   startingAtVertex vertex: Vertex<T>? = nil) -> Vertex<T>? {
+
+		var vertexes = self.vertexes
+		var visited = Set<Vertex<T>>()
+
+		// First create a queue for Breadth First Search
+		var bfsQueue = Queue<Vertex<T>>()
+
+		// This part is technically optional,
+		// but can speed things up if you know a place to start searching from.
+		// First check if starting vertex is in graph.
+		// If it is push it into the Queue
+		if let vertex = vertex {
+			if vertexes.contains(vertex) {
+				bfsQueue.push(vertex)
+			} else {
+				// Early Escape
+				return nil
+			}
+		}
+
+		// If no starting vertex, pop first of set of vertexies.
+		if bfsQueue.isEmpty,
+		   let startingVertex = vertexes.popFirst() {
+			bfsQueue.push(startingVertex)
+		}
+
+		// Let the searching begin.
+		while !bfsQueue.isEmpty {
+			guard let currentVertex = bfsQueue.pop() else { return nil }
+			visited.insert(currentVertex)
+			if currentVertex.data == data {
+				return currentVertex
+			} else {
+				let currentVertexList = adjacencies[currentVertex]
+				currentVertexList?.forEach({ edge in
+					if edge.source == currentVertex {
+						if !visited.contains(edge.destination) {
+							bfsQueue.push(edge.destination)
+						}
+					}
+				})
+			}
+		}
+
+		return nil
+
+	}
+
+
+	/**
+	 Breadth First Search
+	 - Parameter data: T
+	 - Parameter vertex: Vertex to start search from, optional.
+	 - Returns: Vertex<T>?
+	 */
+	public func breadthFirstSearch(forVertex target: Vertex<T>,
+								   startingAtVertex starting: Vertex<T>? = nil) -> Vertex<T>? {
+
+		var vertexes = self.vertexes
+		var visited = Set<Vertex<T>>()
+
+		// First create a queue for Breadth First Search
+		var bfsQueue = Queue<Vertex<T>>()
+
+		// This part is technically optional,
+		// but can speed things up if you know a place to start searching from.
+		// First check if starting vertex is in graph.
+		// If it is push it into the Queue
+		if let starting = starting {
+			if vertexes.contains(starting) {
+				bfsQueue.push(starting)
+			} else {
+				// Early Escape
+				return nil
+			}
+		}
+
+		// If no starting vertex, pop first of set of vertexies.
+		if bfsQueue.isEmpty,
+		   let startingVertex = vertexes.popFirst() {
+			bfsQueue.push(startingVertex)
+		}
+
+		// Let the searching begin.
+		while !bfsQueue.isEmpty {
+			guard let currentVertex = bfsQueue.pop() else { return nil }
+			visited.insert(currentVertex)
+			if currentVertex == target {
+				return currentVertex
+			} else {
+				let currentVertexList = adjacencies[currentVertex]
+				currentVertexList?.forEach({ edge in
+					if edge.source == currentVertex {
+						if !visited.contains(edge.destination) {
+							bfsQueue.push(edge.destination)
+						}
+					}
+				})
+			}
+		}
+
+		return nil
+
+	}
+
+
+
+
+	public func depthFirstSearch(forData data: T,
+								 startingAtVertex vertex: Vertex<T>? = nil) -> Vertex<T>? {
+
+
+		return nil
+
+	}
+
+
 
 }
 
