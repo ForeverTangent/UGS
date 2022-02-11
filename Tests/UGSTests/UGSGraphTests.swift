@@ -35,6 +35,8 @@ final class UGSGraphTests: XCTestCase {
 		target = "{2: C -> [ 0: A ]}"
 		XCTAssert(testDescription.contains(target), "!debugDescription.contains(\"target")
 
+		print(graph.vertexes)
+
 	}
 
 }

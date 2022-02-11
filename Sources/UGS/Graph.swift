@@ -83,7 +83,7 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	// MARK: - Properties
 
 	private var adjacencies: [Vertex<T>: [Edge<T>]] = [:]
-	private var vertexes: Set<Vertex<T>> {
+	public var vertexes: Set<Vertex<T>> {
 		let keyArray = adjacencies.map({ $0.key })
 		let keySet = Set(keyArray)
 		return keySet
