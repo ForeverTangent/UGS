@@ -12,7 +12,7 @@ import AppKit
 // MARK: - Vertex
 
 /**
-	This implimentation of a Vertex structure is based on the Ray Wenderlich - "Data Structures and Algorhythms in Swift"  with  modifications.
+ This implimentation of a Vertex structure is based on the Ray Wenderlich - "Data Structures and Algorhythms in Swift"  with  modifications.
  */
 public struct Vertex<T: Codable>: Codable, JSONDescription {
 	public let index: Int
@@ -160,13 +160,13 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	// MARK: - Graph Algorhythms
 
 	/**
-	 	Breadth First Search
+	 Breadth First Search for data
+
 	 - Parameter data: T
 	 - Parameter vertex: Vertex to start search from, optional.
 	 - Returns: Vertex<T>?
 	 */
-	public func breadthFirstSearch(forData data: T,
-								   startingAtVertex vertex: Vertex<T>? = nil) -> Vertex<T>? {
+	public func bfsForData(_ data: T, startingAtVertex vertex: Vertex<T>? = nil) -> Vertex<T>? {
 
 		var vertexes = self.vertexes
 		var visited = Set<Vertex<T>>()
@@ -217,13 +217,13 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 
 
 	/**
-	 Breadth First Search
-	 - Parameter data: T
-	 - Parameter vertex: Vertex to start search from, optional.
+	 Breadth First Search for Vertex
+
+	 - Parameter target: Vertex<T>,
+	 - Parameter starting: Vertex to start search from, optional.
 	 - Returns: Vertex<T>?
 	 */
-	public func breadthFirstSearch(forVertex target: Vertex<T>,
-								   startingAtVertex starting: Vertex<T>? = nil) -> Vertex<T>? {
+	public func bfsForVertex(_ target: Vertex<T>, startingAtVertex starting: Vertex<T>? = nil) -> Vertex<T>? {
 
 		var vertexes = self.vertexes
 		var visited = Set<Vertex<T>>()
@@ -278,11 +278,17 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	public func depthFirstSearch(forData data: T,
 								 startingAtVertex vertex: Vertex<T>? = nil) -> Vertex<T>? {
 
-
 		return nil
 
 	}
 
+
+	public func depthFirstSearch(forVertex target: Vertex<T>,
+								 startingAtVertex starting: Vertex<T>? = nil) -> Vertex<T>? {
+
+		return nil
+
+	}
 
 
 }

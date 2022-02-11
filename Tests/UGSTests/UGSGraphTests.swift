@@ -72,19 +72,19 @@ final class UGSGraphTests: XCTestCase {
 			lhs.index < rhs.index
 		}))
 
-		if let results = graph.breadthFirstSearch(forData: Z.data, startingAtVertex: A) {
+		if let results = graph.bfsForData(Z.data, startingAtVertex: A) {
 			print(results)
 		}
 
-		if let results = graph.breadthFirstSearch(forData: "A", startingAtVertex: A) {
+		if let results = graph.bfsForData("A", startingAtVertex: A) {
 			print(results)
 		}
 
-		if let results = graph.breadthFirstSearch(forData: "B", startingAtVertex: A) {
+		if let results = graph.bfsForData("B", startingAtVertex: A) {
 			print(results)
 		}
 
-		if let results = graph.breadthFirstSearch(forData: "C", startingAtVertex: A) {
+		if let results = graph.bfsForData("C", startingAtVertex: A) {
 			print(results)
 		}
 
@@ -123,19 +123,19 @@ final class UGSGraphTests: XCTestCase {
 			lhs.index < rhs.index
 		}))
 
-		if let results = graph.breadthFirstSearch(forVertex: Z, startingAtVertex: A) {
+		if let results = graph.bfsForVertex(Z, startingAtVertex: A) {
 			print(results)
 		}
 
-		if let results = graph.breadthFirstSearch(forVertex: A, startingAtVertex: A) {
+		if let results = graph.bfsForVertex(A, startingAtVertex: A) {
 			print(results)
 		}
 
-		if let results = graph.breadthFirstSearch(forVertex: B, startingAtVertex: A) {
+		if let results = graph.bfsForVertex(B, startingAtVertex: A) {
 			print(results)
 		}
 
-		if let results = graph.breadthFirstSearch(forVertex: C, startingAtVertex: A) {
+		if let results = graph.bfsForVertex(C, startingAtVertex: A) {
 			print(results)
 		}
 
