@@ -40,6 +40,29 @@ final class UGSGraphTests: XCTestCase {
 	}
 
 
+	func testGraphUndirectedBFS_00() {
+		let graph = Graph<String>()
+
+		let A = graph.createVertex(data: "A")
+		let B = graph.createVertex(data: "B")
+		let C = graph.createVertex(data: "C")
+
+		graph.add(.undirected, from: A, to: B)
+		graph.add(.undirected, from: B, to: C)
+
+		print(graph)
+		let testDescription = graph.description
+		print(testDescription)
+
+		var count = 0
+		graph.bfsForData { vertex in
+			print("VISITED: \(vertex) on step \(count)")
+			count = count + 1
+		}
+
+	}
+
+
 	func testGraphUndirectedBFS_01() {
 
 		let graph = Graph<String>()
@@ -72,21 +95,66 @@ final class UGSGraphTests: XCTestCase {
 			lhs.index < rhs.index
 		}))
 
-		if let results = graph.bfsForData(Z.data, startingAtVertex: A) {
+		var count = 0
+		var log = ""
+
+		count = 0
+		print("Searching for Z")
+		if let results = graph.bfsForData(Z.data,
+										  startingAtVertex: A,
+										  onVisit: { vertex in
+			log = log + "VISITED: \(vertex) on step \(count)\n"
+			count = count + 1
+		}) {
 			print(results)
 		}
 
-		if let results = graph.bfsForData("A", startingAtVertex: A) {
+		print(log)
+		print("Final Count: \(count)\n")
+
+		log = ""
+		count = 0
+		print("Searching for A")
+		if let results = graph.bfsForData("A",
+										  startingAtVertex: A,
+										  onVisit: { vertex in
+			log = log + "VISITED: \(vertex) on step \(count)\n"
+			count = count + 1
+		}) {
 			print(results)
 		}
 
-		if let results = graph.bfsForData("B", startingAtVertex: A) {
-			print(results)
-		}
+		print(log)
+		print("Final Count: \(count)\n")
 
-		if let results = graph.bfsForData("C", startingAtVertex: A) {
+		log = ""
+		count = 0
+		print("Searching for B")
+		if let results = graph.bfsForData("B",
+										  startingAtVertex: A,
+										  onVisit: { vertex in
+			log = log + "VISITED: \(vertex) on step \(count)\n"
+			count = count + 1
+		}) {
 			print(results)
 		}
+		print(log)
+		print("Final Count: \(count)\n")
+
+
+		log = ""
+		count = 0
+		print("Searching for C")
+		if let results = graph.bfsForData("C",
+										  startingAtVertex: A,
+										  onVisit: { vertex in
+			log = log + "VISITED: \(vertex) on step \(count)\n"
+			count = count + 1
+		}) {
+			print(results)
+		}
+		print(log)
+		print("Final Count: \(count)\n")
 
 	}
 
