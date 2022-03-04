@@ -23,7 +23,7 @@ extension Vertex: Equatable & Comparable {
 	public static func == (lhs: Vertex<T>, rhs: Vertex<T>) -> Bool {
 		lhs.index == rhs.index
 	}
-
+	
 	public static func < (lhs: Vertex<T>, rhs: Vertex<T>) -> Bool {
 		lhs.index < rhs.index
 	}
@@ -46,9 +46,9 @@ public enum EdgeType {
 }
 
 /**
-
+ 
  This implimentation of a Edge structure is based on the Ray Wenderlich - "Data Structures and Algorhythms in Swift"  with  modifications.
-
+ 
  The category property, if if you want the edges to have a characterization.
  */
 public struct Edge<T: Codable>: Codable, JSONDescription {
@@ -63,7 +63,7 @@ extension Edge: Equatable & Comparable {
 		lhs.source.index == rhs.source.index &&
 		lhs.destination.index == rhs.destination.index
 	}
-
+	
 	public static func < (lhs: Edge<T>, rhs: Edge<T>) -> Bool {
 		lhs.source.index < rhs.source.index &&
 		lhs.destination.index < rhs.destination.index
@@ -75,40 +75,40 @@ extension Edge: Equatable & Comparable {
 
 /**
  This implimentation of a Edge structure is based on the Ray Wenderlich - "Data Structures and Algorhythms in Swift"  with  modifications.
-
+ 
  The Graph is your basic adjacency list type of graph.  Althought adjacency matrixs are good for some algorhtyhms, adjancent list is a better general structure.
  */
 public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
-
+	
 	// MARK: - Properties
-
+	
 	private var adjacencies: [Vertex<T>: [Edge<T>]] = [:]
 	public var vertexes: Set<Vertex<T>> {
 		let keyArray = adjacencies.map({ $0.key })
 		let keySet = Set(keyArray)
 		return keySet
 	}
-
+	
 	public init() {}
-
+	
 	// MARK: - Graph Utility Methods
-
+	
 	public func createVertex(data: T) -> Vertex<T> {
 		let vertex = Vertex(index: adjacencies.count, data: data)
 		adjacencies[vertex] = []
 		return vertex
 	}
-
+	
 	private func addDirectedEdge(from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil) {
 		let edge = Edge(source: source, destination: destination, weight: weight, category: "")
 		adjacencies[source]?.append(edge)
 	}
-
+	
 	private func addUndirectedEdge(between source: Vertex<T>, and destination: Vertex<T>, weight: Double? = nil) {
 		addDirectedEdge(from: source, to: destination, weight: weight)
 		addDirectedEdge(from: destination, to: source, weight: weight)
 	}
-
+	
 	public func add(_ edge: EdgeType, from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil) {
 		switch edge {
 			case .directed:
@@ -117,7 +117,7 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				addUndirectedEdge(between: source, and: destination, weight: weight)
 		}
 	}
-
+	
 	func removeDirectedEdge(from source: Vertex<T>, to destination: Vertex<T>) {
 		if let adjacent = adjacencies[source] {
 			adjacencies[source]? = adjacent.filter({ edge in
@@ -125,7 +125,7 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 			})
 		}
 	}
-
+	
 	func removeUndirectedEdge(between source: Vertex<T>, and destination: Vertex<T>) {
 		if let sourceAdjacent = adjacencies[source] {
 			adjacencies[source]? = sourceAdjacent.filter({ edge in
@@ -138,7 +138,7 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 			})
 		}
 	}
-
+	
 	func removeEdge(_ edge: EdgeType = .undirected, from source: Vertex<T>, to destination: Vertex<T>) {
 		switch edge {
 			case .directed:
@@ -147,21 +147,21 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				removeUndirectedEdge(between: source, and: destination)
 		}
 	}
-
+	
 	public func edges(from source: Vertex<T>) -> [Edge<T>] {
 		adjacencies[source] ?? []
 	}
-
+	
 	public func weight(from source: Vertex<T>, to destination: Vertex<T>) -> Double? {
 		edges(from: source).first { $0.destination == destination }?.weight
 	}
-
-
+	
+	
 	// MARK: - Graph Algorhythms
-
+	
 	/**
 	 Breadth First Search for data
-
+	 
 	 - Parameter data: T
 	 - Parameter vertex: Vertex to start search from, optional.
 	 - Returns: Vertex<T>?
@@ -170,12 +170,12 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	public func bfsForData(_ data: T? = nil,
 						   startingAtVertex startingVertex: Vertex<T>? = nil,
 						   onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-
+		
 		var visited = Set<Vertex<T>>()
 		
 		// First create a queue for Breadth First Search
 		var bfsQueue = Queue<Vertex<T>>()
-
+		
 		// This part is technically optional,
 		// but can speed things up if you know a place to start searching from.
 		// First check if starting vertex is in graph.
@@ -188,13 +188,13 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				return nil
 			}
 		}
-
+		
 		// If no starting vertex, pop first of set of vertexies.
 		if bfsQueue.isEmpty,
 		   let startingVertex = vertexes.randomElement() {
 			bfsQueue.push(startingVertex)
 		}
-
+		
 		// Let the searching begin.
 		while !bfsQueue.isEmpty {
 			guard let currentVertex = bfsQueue.pop() else { return nil }
@@ -203,7 +203,7 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 			if let onVisit = onVisit {
 				onVisit(currentVertex)
 			}
-
+			
 			if
 				let data = data,
 				currentVertex.data == data {
@@ -219,15 +219,15 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				})
 			}
 		}
-
+		
 		return nil
-
+		
 	}
-
-
+	
+	
 	/**
 	 Breadth First Search for Vertex
-
+	 
 	 - Parameter target: Vertex<T>,
 	 - Parameter starting: Vertex to start search from, optional.
 	 - Returns: Vertex<T>?
@@ -236,13 +236,13 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	public func bfsForVertex(_ target: Vertex<T>? = nil,
 							 startingAtVertex starting: Vertex<T>? = nil,
 							 onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-
-//		var vertexes = self.vertexes
+		
+		//		var vertexes = self.vertexes
 		var visited = Set<Vertex<T>>()
-
+		
 		// First create a queue for Breadth First Search
 		var bfsQueue = Queue<Vertex<T>>()
-
+		
 		// This part is technically optional,
 		// but can speed things up if you know a place to start searching from.
 		// First check if starting vertex is in graph.
@@ -255,22 +255,22 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				return nil
 			}
 		}
-
+		
 		// If no starting vertex, pop first of set of vertexies.
 		if bfsQueue.isEmpty,
 		   let startingVertex = vertexes.randomElement() {
 			bfsQueue.push(startingVertex)
 		}
-
+		
 		// Let the searching begin.
 		while !bfsQueue.isEmpty {
 			guard let currentVertex = bfsQueue.pop() else { return nil }
 			visited.insert(currentVertex)
-
+			
 			if let onVisit = onVisit {
 				onVisit(currentVertex)
 			}
-
+			
 			if
 				let target = target,
 				currentVertex == target {
@@ -286,25 +286,25 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				})
 			}
 		}
-
+		
 		return nil
-
+		
 	}
-
-
+	
+	
 	// MARK: TODO: Depth First Search
-
+	
 	@discardableResult
-	public func depthFirstSearch(forData data: T? = nil,
-								 startingAtVertex startingVertex: Vertex<T>? = nil,
-								 onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-
-//		var vertexes = self.vertexes
+	public func dfsForData(_ data: T? = nil,
+						   startingAtVertex startingVertex: Vertex<T>? = nil,
+						   onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
+		
+		//		var vertexes = self.vertexes
 		var visited = Set<Vertex<T>>()
-
+		
 		// First create a queue for Breadth First Search
 		var dfsStack = Stack<Vertex<T>>()
-
+		
 		// This part is technically optional,
 		// but can speed things up if you know a place to start searching from.
 		// First check if starting vertex is in graph.
@@ -317,24 +317,24 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				return nil
 			}
 		}
-
+		
 		// If no starting vertex, pop first of set of vertexies.
 		if dfsStack.isEmpty,
 		   let startingVertex = vertexes.randomElement() {
 			dfsStack.push(startingVertex)
 		}
-
-
+		
+		
 		// Let the searching begin.
 		while !dfsStack.isEmpty {
 			guard let currentVertex = dfsStack.pop() else { return nil }
 			visited.insert(currentVertex)
-
+			
 			if let onVisit = onVisit {
 				onVisit(currentVertex)
 			}
-
-
+			
+			
 			if
 				let data = data,
 				currentVertex.data == data {
@@ -350,22 +350,22 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				})
 			}
 		}
-
+		
 		return nil
-
+		
 	}
-
+	
 	@discardableResult
-	public func depthFirstSearch(forVertex target: Vertex<T>? = nil,
-								 startingAtVertex startingVertex: Vertex<T>? = nil,
-								 onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-
+	public func dfsForVertex(_ target: Vertex<T>? = nil,
+							 startingAtVertex startingVertex: Vertex<T>? = nil,
+							 onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
+		
 		//		var vertexes = self.vertexes
 		var visited = Set<Vertex<T>>()
-
+		
 		// First create a queue for Breadth First Search
 		var dfsStack = Stack<Vertex<T>>()
-
+		
 		// This part is technically optional,
 		// but can speed things up if you know a place to start searching from.
 		// First check if starting vertex is in graph.
@@ -378,24 +378,24 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				return nil
 			}
 		}
-
+		
 		// If no starting vertex, pop first of set of vertexies.
 		if dfsStack.isEmpty,
 		   let startingVertex = vertexes.randomElement() {
 			dfsStack.push(startingVertex)
 		}
-
-
+		
+		
 		// Let the searching begin.
 		while !dfsStack.isEmpty {
 			guard let currentVertex = dfsStack.pop() else { return nil }
 			visited.insert(currentVertex)
-
+			
 			if let onVisit = onVisit {
 				onVisit(currentVertex)
 			}
-
-
+			
+			
 			if
 				let target = target,
 				currentVertex == target {
@@ -411,23 +411,23 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 				})
 			}
 		}
-
+		
 		return nil
-
+		
 	}
-
-
+	
+	
 	// TODO: Topological Sort
-
+	
 	// TODO: STRONGLY-CONNECTED-COMPONENTS?
-
+	
 	// TODO: Minimum Spanning Trees
-
+	
 	// TODO: Single-Source Shortest Paths
-
+	
 	// TODO: Maximum Flow
-
-
+	
+	
 }
 
 extension Graph: CustomStringConvertible {
@@ -450,6 +450,6 @@ extension Graph: CustomStringConvertible {
 		}
 		return result
 	}
-
+	
 }
 
