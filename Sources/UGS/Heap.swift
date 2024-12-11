@@ -17,7 +17,7 @@ Starting index at 1.   There are two ways to make a heap with arrays.  One start
 I prefer the 1 index approach, because it lets you reserve the 0-index, if you want to use it for something (like a temporary space).
 
 */
-struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
+class Heap<E: Comparable & Codable>: Codable, JSONDescription {
 
 	// MARK: - Properties
 
@@ -145,14 +145,14 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 	
 	// MARK: Heapify()
 
-	private mutating func swap(indexOne: Int, indexTwo: Int) {
+	private func swap(indexOne: Int, indexTwo: Int) {
 		items[0] = items[indexOne]
 		items[indexOne] = items[indexTwo]
 		items[indexTwo] = items[0]
 		items[0] = nil
 	}
 
-	private mutating func  minHeapifyUp() {
+	private func  minHeapifyUp() {
 		var index = count
 		while
 			isMinHeap,
@@ -165,7 +165,7 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 	}
 
 
-	private mutating func  maxHeapifyUp() {
+	private func  maxHeapifyUp() {
 		var index = count
 		while
 			!isMinHeap,
@@ -178,7 +178,7 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 	}
 
 
-	private mutating func minHeapifyDown() {
+	private func minHeapifyDown() {
 		var index = 1 // We are using 1-index
 		while hasLeftChild(index) {
 			var smallerChildIndex = getLeftChildIndex(index)
@@ -201,7 +201,7 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 		}
 	}
 
-	private mutating func maxHeapifyDown() {
+	private func maxHeapifyDown() {
 		var index = 1 // We are using 1-index
 		while hasLeftChild(index) {
 			var smallerChildIndex = getLeftChildIndex(index)
@@ -225,7 +225,7 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 	}
 
 
-	private mutating func heapifyDown() {
+	private func heapifyDown() {
 		if isMinHeap {
 			minHeapifyDown()
 		} else {
@@ -233,7 +233,7 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 		}
 	}
 
-	private mutating func heapifyUp() {
+	private func heapifyUp() {
 		if isMinHeap {
 			minHeapifyUp()
 		} else {
@@ -245,14 +245,14 @@ struct Heap<E: Comparable & Codable>: Codable, JSONDescription {
 
 	// MARK: Publics
 
-	public mutating func push(_ item: E) {
+	public func push(_ item: E) {
 		items.append(item)
 		heapifyUp()
 	}
 
 
 	@discardableResult
-	mutating public func poll() -> E? {
+	public func poll() -> E? {
 		if !isEmpty {
 			let topItem = items[1]
 			let lastItem = items.removeLast()
@@ -302,7 +302,7 @@ extension Heap {
 	*/
 	#if DEBUG
 
-	init(isMinHeap: Bool = true, mockArray: Array<E?> = Array<E?>()) {
+    convenience init(isMinHeap: Bool = true, mockArray: Array<E?> = Array<E?>()) {
 		self.init(isMinHeap: isMinHeap)
 		let joined = items + mockArray[0...]
 		items = joined
@@ -344,12 +344,12 @@ extension Heap {
 		return getRightChild(index)
 	}
 
-	public mutating func testHeapifyUp() -> [E?] {
+	public func testHeapifyUp() -> [E?] {
 		heapifyUp()
 		return items
 	}
 
-	public mutating func testHeapifyDown() -> [E?] {
+	public func testHeapifyDown() -> [E?] {
 		heapifyDown()
 		return items
 	}

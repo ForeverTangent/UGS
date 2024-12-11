@@ -12,15 +12,15 @@ Stack built on Swift's basic array structure.
 
 The elements can be pretty much anything.
 */
-struct Stack<E: Codable>: Codable, JSONDescription {
+class Stack<E: Codable>: Codable, JSONDescription {
 	var items  = [E]()
 
-	mutating func push(_ item: E) {
+	func push(_ item: E) {
 		items.append(item)
 	}
 
 	@discardableResult
-	mutating func pop() -> E? {
+	func pop() -> E? {
 		guard
 			!items.isEmpty
 		else {
@@ -43,7 +43,7 @@ struct Stack<E: Codable>: Codable, JSONDescription {
 		}
 	}
 
-	mutating func clear() {
+	func clear() {
 		items.removeAll()
 	}
 }
