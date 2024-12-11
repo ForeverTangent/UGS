@@ -69,7 +69,9 @@ extension RBNode: CustomStringConvertible {
 
 }
 
-
+/**
+ RedBlack Tree
+ */
 class RBTree<T: Comparable & Codable> {
 
     // MARK: - Properties

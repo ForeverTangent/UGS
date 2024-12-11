@@ -7,14 +7,11 @@
 
 import Foundation
 
-
 class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
 
 	var data: E
 	var left: AVLNode<E>?
 	var right: AVLNode<E>?
-
-
 
 	/**
 	 The Height of the node.
@@ -34,7 +31,6 @@ class AVLNode<E: Comparable & Codable>: Codable, JSONDescription {
 	}
 
 }
-
 
 extension AVLNode: CustomStringConvertible {
 
@@ -77,8 +73,6 @@ extension AVLNode: CustomStringConvertible {
 	}
 
 }
-
-
 
 
 /**
