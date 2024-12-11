@@ -53,7 +53,6 @@ public struct Edge<T: Codable>: Codable, JSONDescription {
 	public let source: Vertex<T>
 	public let destination: Vertex<T>
 	public let weight: Double?
-	public let category: String?
 }
 
 extension Edge: Equatable & Comparable {
@@ -72,34 +71,42 @@ extension Edge: Equatable & Comparable {
 // MARK: - Graph
 
 /**
- This implimentation of a Edge structure is based on the Ray Wenderlich - "Data Structures and Algorhythms in Swift"  with  modifications.
+ This implementation of a Edge structure is based on the Ray Wenderlich - "Data Structures and Algorhythms in Swift"  with  modifications.
  
- The Graph is your basic adjacency list type of graph.  Althought adjacency matrixs are good for some algorhtyhms, adjancent list is a better general structure.
+ The Graph is your basic adjacency list type of graph.  Although adjacency matrixes are good for some algorithms, adjacency list is a better general structure.
  */
 public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	
 	// MARK: - Properties
 	
-	private var adjacencies: [Vertex<T>: [Edge<T>]] = [:]
-	public var vertexes: Set<Vertex<T>> {
-		let keyArray = adjacencies.map({ $0.key })
-		let keySet = Set(keyArray)
-		return keySet
-	}
+	private var adjacencyList: [Vertex<T>: [Edge<T>]] = [:]
 	
 	public init() {}
 	
 	// MARK: - Graph Utility Methods
 	
-	public func createVertex(data: T) -> Vertex<T> {
-		let vertex = Vertex(index: adjacencies.count, data: data)
-		adjacencies[vertex] = []
+	public func edges(from source: Vertex<T>) -> [Edge<T>]? {
+        return adjacencyList[source]
+    }
+    
+    public func vertices() -> [Vertex<T>] {
+        return Array(adjacencyList.keys)
+    }
+
+	public func addVertex(data: T) -> Vertex<T> {
+		let vertex = Vertex(index: adjacencyList.count, data: data)
+		adjacencyList[vertex] = []
 		return vertex
 	}
 	
+    public func addEdge(from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil) {
+        let edge = Edge(source: source, destination: destination, weight: weight)
+        adjacencyList[source]?.append(edge)
+    }
+
 	private func addDirectedEdge(from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil) {
-		let edge = Edge(source: source, destination: destination, weight: weight, category: "")
-		adjacencies[source]?.append(edge)
+		let edge = Edge(source: source, destination: destination, weight: weight)
+		adjacencyList[source]?.append(edge)
 	}
 	
 	private func addUndirectedEdge(between source: Vertex<T>, and destination: Vertex<T>, weight: Double? = nil) {
@@ -117,21 +124,21 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	}
 	
 	func removeDirectedEdge(from source: Vertex<T>, to destination: Vertex<T>) {
-		if let adjacent = adjacencies[source] {
-			adjacencies[source]? = adjacent.filter({ edge in
+		if let adjacent = adjacencyList[source] {
+            adjacencyList[source]? = adjacent.filter({ edge in
 				edge.source == source && edge.destination == destination
 			})
 		}
 	}
 	
 	func removeUndirectedEdge(between source: Vertex<T>, and destination: Vertex<T>) {
-		if let sourceAdjacent = adjacencies[source] {
-			adjacencies[source]? = sourceAdjacent.filter({ edge in
+		if let sourceAdjacent = adjacencyList[source] {
+            adjacencyList[source]? = sourceAdjacent.filter({ edge in
 				edge.source == source && edge.destination == destination
 			})
 		}
-		if let destinationAdjacent = adjacencies[destination] {
-			adjacencies[destination]? = destinationAdjacent.filter({ edge in
+		if let destinationAdjacent = adjacencyList[destination] {
+            adjacencyList[destination]? = destinationAdjacent.filter({ edge in
 				edge.source == source && edge.destination == destination
 			})
 		}
@@ -147,291 +154,19 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 	}
 	
 	public func edges(from source: Vertex<T>) -> [Edge<T>] {
-		adjacencies[source] ?? []
+        adjacencyList[source] ?? []
 	}
 	
 	public func weight(from source: Vertex<T>, to destination: Vertex<T>) -> Double? {
 		edges(from: source).first { $0.destination == destination }?.weight
-	}
-	
-	
-	// MARK: - Graph Algorhythms
-	
-	/**
-	 Breadth First Search for data
-	 
-	 - Parameter data: T
-	 - Parameter vertex: Vertex to start search from, optional.
-	 - Returns: Vertex<T>?
-	 */
-	@discardableResult
-	public func bfsForData(_ data: T? = nil,
-						   startingAtVertex startingVertex: Vertex<T>? = nil,
-						   onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-		
-		var visited = Set<Vertex<T>>()
-		
-		// First create a queue for Breadth First Search
-		var bfsQueue = Queue<Vertex<T>>()
-		
-		// This part is technically optional,
-		// but can speed things up if you know a place to start searching from.
-		// First check if starting vertex is in graph.
-		// If it is push it into the Queue
-		if let vertex = startingVertex {
-			if vertexes.contains(vertex) {
-				bfsQueue.push(vertex)
-			} else {
-				// Early Escape
-				return nil
-			}
-		}
-		
-		// If no starting vertex, pop first of set of vertexies.
-		if bfsQueue.isEmpty,
-		   let startingVertex = vertexes.randomElement() {
-			bfsQueue.push(startingVertex)
-		}
-		
-		// Let the searching begin.
-		while !bfsQueue.isEmpty {
-			guard let currentVertex = bfsQueue.pop() else { return nil }
-			visited.insert(currentVertex)
-			
-			if let onVisit = onVisit {
-				onVisit(currentVertex)
-			}
-			
-			if
-				let data = data,
-				currentVertex.data == data {
-				return currentVertex
-			} else {
-				let currentVertexList = adjacencies[currentVertex]
-				currentVertexList?.forEach({ edge in
-					if edge.source == currentVertex {
-						if !visited.contains(edge.destination) {
-							bfsQueue.push(edge.destination)
-						}
-					}
-				})
-			}
-		}
-		
-		return nil
-		
-	}
-	
-	
-	/**
-	 Breadth First Search for Vertex
-	 
-	 - Parameter target: Vertex<T>,
-	 - Parameter starting: Vertex to start search from, optional.
-	 - Returns: Vertex<T>?
-	 */
-	@discardableResult
-	public func bfsForVertex(_ target: Vertex<T>? = nil,
-							 startingAtVertex starting: Vertex<T>? = nil,
-							 onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-		
-		//		var vertexes = self.vertexes
-		var visited = Set<Vertex<T>>()
-		
-		// First create a queue for Breadth First Search
-		var bfsQueue = Queue<Vertex<T>>()
-		
-		// This part is technically optional,
-		// but can speed things up if you know a place to start searching from.
-		// First check if starting vertex is in graph.
-		// If it is push it into the Queue
-		if let starting = starting {
-			if vertexes.contains(starting) {
-				bfsQueue.push(starting)
-			} else {
-				// Early Escape
-				return nil
-			}
-		}
-		
-		// If no starting vertex, pop first of set of vertexies.
-		if bfsQueue.isEmpty,
-		   let startingVertex = vertexes.randomElement() {
-			bfsQueue.push(startingVertex)
-		}
-		
-		// Let the searching begin.
-		while !bfsQueue.isEmpty {
-			guard let currentVertex = bfsQueue.pop() else { return nil }
-			visited.insert(currentVertex)
-			
-			if let onVisit = onVisit {
-				onVisit(currentVertex)
-			}
-			
-			if
-				let target = target,
-				currentVertex == target {
-				return currentVertex
-			} else {
-				let currentVertexList = adjacencies[currentVertex]
-				currentVertexList?.forEach({ edge in
-					if edge.source == currentVertex {
-						if !visited.contains(edge.destination) {
-							bfsQueue.push(edge.destination)
-						}
-					}
-				})
-			}
-		}
-		
-		return nil
-		
-	}
-	
-	
-	// MARK: TODO: Depth First Search
-	
-	@discardableResult
-	public func dfsForData(_ data: T? = nil,
-						   startingAtVertex startingVertex: Vertex<T>? = nil,
-						   onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-		
-		//		var vertexes = self.vertexes
-		var visited = Set<Vertex<T>>()
-		
-		// First create a queue for Breadth First Search
-		var dfsStack = Stack<Vertex<T>>()
-		
-		// This part is technically optional,
-		// but can speed things up if you know a place to start searching from.
-		// First check if starting vertex is in graph.
-		// If it is push it into the Queue
-		if let starting = startingVertex {
-			if vertexes.contains(starting) {
-				dfsStack.push(starting)
-			} else {
-				// Early Escape
-				return nil
-			}
-		}
-		
-		// If no starting vertex, pop first of set of vertexies.
-		if dfsStack.isEmpty,
-		   let startingVertex = vertexes.randomElement() {
-			dfsStack.push(startingVertex)
-		}
-		
-		
-		// Let the searching begin.
-		while !dfsStack.isEmpty {
-			guard let currentVertex = dfsStack.pop() else { return nil }
-			visited.insert(currentVertex)
-			
-			if let onVisit = onVisit {
-				onVisit(currentVertex)
-			}
-			
-			
-			if
-				let data = data,
-				currentVertex.data == data {
-				return currentVertex
-			} else {
-				let currentVertexList = adjacencies[currentVertex]
-				currentVertexList?.forEach({ edge in
-					if edge.source == currentVertex {
-						if !visited.contains(edge.destination) {
-							dfsStack.push(edge.destination)
-						}
-					}
-				})
-			}
-		}
-		
-		return nil
-		
-	}
-	
-	@discardableResult
-	public func dfsForVertex(_ target: Vertex<T>? = nil,
-							 startingAtVertex startingVertex: Vertex<T>? = nil,
-							 onVisit: ((Vertex<T>) -> Void)? = nil) -> Vertex<T>? {
-		
-		//		var vertexes = self.vertexes
-		var visited = Set<Vertex<T>>()
-		
-		// First create a queue for Breadth First Search
-		var dfsStack = Stack<Vertex<T>>()
-		
-		// This part is technically optional,
-		// but can speed things up if you know a place to start searching from.
-		// First check if starting vertex is in graph.
-		// If it is push it into the Queue
-		if let starting = startingVertex {
-			if vertexes.contains(starting) {
-				dfsStack.push(starting)
-			} else {
-				// Early Escape
-				return nil
-			}
-		}
-		
-		// If no starting vertex, pop first of set of vertexies.
-		if dfsStack.isEmpty,
-		   let startingVertex = vertexes.randomElement() {
-			dfsStack.push(startingVertex)
-		}
-		
-		
-		// Let the searching begin.
-		while !dfsStack.isEmpty {
-			guard let currentVertex = dfsStack.pop() else { return nil }
-			visited.insert(currentVertex)
-			
-			if let onVisit = onVisit {
-				onVisit(currentVertex)
-			}
-			
-			
-			if
-				let target = target,
-				currentVertex == target {
-				return currentVertex
-			} else {
-				let currentVertexList = adjacencies[currentVertex]
-				currentVertexList?.forEach({ edge in
-					if edge.source == currentVertex {
-						if !visited.contains(edge.destination) {
-							dfsStack.push(edge.destination)
-						}
-					}
-				})
-			}
-		}
-		
-		return nil
-		
-	}
-	
-	
-	// TODO: Topological Sort
-	
-	// TODO: STRONGLY-CONNECTED-COMPONENTS?
-	
-	// TODO: Minimum Spanning Trees
-	
-	// TODO: Single-Source Shortest Paths
-	
-	// TODO: Maximum Flow
-	
+	}	
 	
 }
 
 extension Graph: CustomStringConvertible {
 	public var description: String {
 		var result = ""
-		for (vertex, edges) in adjacencies.sorted(by: { arg0, arg1 in
+		for (vertex, edges) in adjacencyList.sorted(by: { arg0, arg1 in
 			arg0.key < arg1.key
 		}) {
 			var edgeString = ""
