@@ -99,9 +99,12 @@ public class Graph<T: Hashable & Codable>: Codable, JSONDescription {
 		return vertex
 	}
 	
-    public func addEdge(from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil) {
-        let edge = Edge(source: source, destination: destination, weight: weight)
-        adjacencyList[source]?.append(edge)
+    public func addEdge(from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil, directed: Bool = false) {
+        if directed {
+            addDirectedEdge(from: source, to: destination, weight: weight)
+        } else {
+            addUndirectedEdge(between: source, and: destination, weight: weight)
+        }
     }
 
 	private func addDirectedEdge(from source: Vertex<T>, to destination: Vertex<T>, weight: Double? = nil) {

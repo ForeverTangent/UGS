@@ -12,7 +12,6 @@ import XCTest
 
 final class UGSGraphTests: XCTestCase {
 
-
 	func testGraphUndirected00() {
 
 		let graph = Graph<String>()
@@ -44,8 +43,6 @@ final class UGSGraphTests: XCTestCase {
 
 		let graph = Graph<String>()
 
-		let Z = graph.addVertex(data: "Z")
-
 		let A = graph.addVertex(data: "A")
 		let B = graph.addVertex(data: "B")
 		let C = graph.addVertex(data: "C")
@@ -72,20 +69,12 @@ final class UGSGraphTests: XCTestCase {
 			lhs.index < rhs.index
 		}))
 
-		var count = 0
-		var log = ""
-
-		print(log)
-		print("Final Count: \(count)\n")
-
 	}
 
 
 	func testGraphUndirectedBFS_02() {
 
 		let graph = Graph<String>()
-
-		let Z = graph.addVertex(data: "Z")
 
 		let A = graph.addVertex(data: "A")
 		let B = graph.addVertex(data: "B")
