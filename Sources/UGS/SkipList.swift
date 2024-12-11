@@ -47,12 +47,12 @@ class SkipList<T: Comparable & Codable> {
             update[i] = current
         }
         
-        let level = randomLevel()
-        if level > level {
-            for i in (level + 1)...level {
+        let rndLevel = randomLevel()
+        if rndLevel > level {
+            for i in (level + 1)...rndLevel {
                 update[i] = head
             }
-            level = level
+            level = rndLevel
         }
         
         let newNode = SLNode(value: value, level: level)
